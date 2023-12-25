@@ -6,36 +6,45 @@ import { InventoryModule } from './inventory'
 
 
 export default class Game {
-  constructor() {
+  constructor({ render } = {}) {
     this.modules = {}
     this.stopMain = null
     this.lastTick = null
-    this.tickLength = 1000
-    this.register(WorldModule.name, new WorldModule())
-    this.register(HomeModule.name, new HomeModule())
-    this.register(CharacterModule.name, new CharacterModule())
-    this.register(TaskModule.name, new TaskModule())
-    this.register(InventoryModule.name, new InventoryModule())
+    this.tickLength = 200
+    this.render = render
+    this.renderTime = performance.now()
+    this.register('world', new WorldModule())
+    this.register('home', new HomeModule())
+    this.register('character', new CharacterModule())
+    this.register('task', new TaskModule())
+    this.register('inventory', new InventoryModule())
   }
 
   register(name, module) {
+    module.context = this
+    module.modules = this.modules
     this.modules[name] = module
   }
 
-  init(payload) {
+  init(payload = {}, params = {}) {
+    if (payload.version) {
+      // 版本升级
+    }
+
     // 模块从存档恢复状态
     Object.values(this.modules).forEach((module) => {
-      module.load && module.init(payload)
+      module.init && module.init(payload)
     })
 
-    this.lastTick = payload && payload.lastTick || performance.now()
+    if (!params.offlineProgress) payload.lastTick = performance.now()
+    this.lastTick = payload.lastTick || performance.now()
 
     // 开始主循环
     this.main(this.lastTick)
   }
 
   main (tFrame) {
-    this.stopMain = setTimeout(() => this.main(performance.now()), 100)
+    this.stopMain = setTimeout(() => this.main(performance.now()), this.tickLength)
     const nextTick = this.lastTick + this.tickLength
     let numTicks = 0
 
@@ -48,7 +57,11 @@ export default class Game {
       this.lastTick += this.tickLength
       this.dispatch({ type: 'tick' })
     }
-    this.lastTick = performance.now()
+
+    if (tFrame - this.renderTime > 1000) {
+      this.render && this.render(this.modules)
+      this.renderTime = tFrame
+    }
   }
 
   dispatch(action) {
@@ -58,15 +71,15 @@ export default class Game {
   }
 
   snapShot () {
-    const payload = {
+    const snapShot = {
       lastTick: this.lastTick,
     }
     Object.values(this.modules).forEach((module) => {
-      if (module.snapShot) {
+      if (module.save) {
         const moduleSnapshot = module.save()
-        payload[module.name] = moduleSnapshot
+        snapShot[module.name] = moduleSnapshot
       }
     })
-    return JSON.stringify(payload)
+    return snapShot
   }
 }

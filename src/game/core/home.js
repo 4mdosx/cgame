@@ -5,9 +5,11 @@
 export class HomeModule  {
   name = 'home'
   constructor () {
-    this.status = {}
     this.blockStatus = {}
     this.buildings = []
+    this.overview = {
+      territorial_radius: 0
+    }
   }
 
   dispatch (modules, action) {
@@ -15,14 +17,17 @@ export class HomeModule  {
   }
 
   get () {
-    return this.status
+    return {
+      buildings: this.buildings,
+      overview: this.overview,
+    }
   }
 
-  init (payload) {
-    this.status = payload.home
+  init ({ home = {}}) {
+    Object.assign(this, home)
   }
 
   save () {
-    return this.status
+    return this.get()
   }
 }

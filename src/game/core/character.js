@@ -1,23 +1,49 @@
+class Character {
+  constructor (profile) {
+    this.profile = {
+      name: profile.name || 'Neo',
+    }
+  }
+
+  toJSON () {
+    return this.profile
+  }
+}
+
 export class CharacterModule  {
   name = 'character'
   constructor () {
-    this.status = {}
     this.characters = []
   }
 
   dispatch (modules, action) {
 
+    switch (action.type) {
+      case 'tick':
+        break
+      default:
+        break
+    }
   }
 
   get () {
-    return this.status
+    return {
+      characters: this.characters,
+    }
   }
 
-  init (payload) {
-    this.status = payload.character
+  init ({ character = {}}) {
+    const characters = character.characters || []
+    if (characters.length === 0) {
+      this.characters.push(new Character({}))
+    } else {
+      this.characters = characters.map(character => new Character(character))
+    }
   }
 
   save () {
-    return this.status
+    return {
+      characters: this.characters.map(character => character.toJSON()),
+    }
   }
 }
