@@ -25,13 +25,39 @@ function ProposalButton (props) {
 }
 
 function StateTabContent () {
-  const proposals = useStore(state => state.proposals)
   return (
     <div className='state'>
+      <Proposals />
+      <Buildings />
+    </div>
+  )
+}
+
+function Proposals () {
+  const proposals = useStore(state => state.proposals)
+  return (
+    <div className='proposals'>
       {
         proposals.map((proposal) => {
           return (
             <ProposalButton key={proposal.id} {...proposal} />
+          )
+        })
+      }
+    </div>
+  )
+}
+
+function Buildings () {
+  const buildings = useStore(state => state.buildings)
+  return (
+    <div className='buildings'>
+      {
+        buildings.map((building) => {
+          return (
+            <div key={building.name}>
+              {building.name}
+            </div>
           )
         })
       }

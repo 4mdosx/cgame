@@ -10,6 +10,17 @@ export class InventoryModule  {
   }
 
   dispatch (action) {
+    switch (action.type) {
+      case 'task/finish':
+        const task = action.task
+        if (task.data.proposal) {
+          this.proposals = this.proposals.filter(proposal => proposal.id !== task.data.proposal)
+        }
+        break
+      case 'tick':
+        break
+      default:
+    }
   }
 
   get () {

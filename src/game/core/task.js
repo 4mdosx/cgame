@@ -52,6 +52,18 @@ export class TaskModule  {
   dispatch (action) {
     switch (action.type) {
       case 'tick':
+        if (this.queue[0]) {
+          const task = this.queue[0]
+          if (task.status === 'done') {
+            this.queue.shift()
+            if (task.data.type === 'building') {
+              this.context.dispatch({
+                type: 'task/finish',
+                task
+              })
+            }
+          }
+        }
         break
       default:
         break

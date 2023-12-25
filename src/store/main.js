@@ -5,14 +5,17 @@ export const useStore = create((set, get) => ({
   theme: 'adr',
   proposals: [],
   items: [],
+  buildings: [],
   ...createHomeSlice(set, get),
   mapGameStatusToStore: (modules) => {
-    const { inventory } = modules
+    const { inventory, home } = modules
     const { items, proposals } = inventory.get()
+    const { buildings, overview } = home.get()
     set({
       items,
       proposals,
-      overview: modules.home.get().overview,
+      buildings,
+      overview
     })
   }
 }))
