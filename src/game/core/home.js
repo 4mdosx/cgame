@@ -12,7 +12,7 @@ export class HomeModule  {
     }
   }
 
-  dispatch (modules, action) {
+  dispatch (action) {
 
   }
 

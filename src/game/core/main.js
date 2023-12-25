@@ -66,7 +66,7 @@ export default class Game {
 
   dispatch(action) {
     Object.values(this.modules).forEach((module) => {
-      module.dispatch && module.dispatch(this.modules, action)
+      module.dispatch && module.dispatch(action)
     })
   }
 

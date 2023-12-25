@@ -3,7 +3,7 @@ export class SystemModule {
   constructor() {
   }
 
-  dispatch(modules, action) {}
+  dispatch(action) {}
 
   get() {
     return {

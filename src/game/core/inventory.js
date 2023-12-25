@@ -9,7 +9,7 @@ export class InventoryModule  {
     this.artifacts = []
   }
 
-  dispatch (modules, action) {
+  dispatch (action) {
   }
 
   get () {

@@ -13,7 +13,7 @@ export class WorldModule  {
 
   }
 
-  dispatch (modules, action) {
+  dispatch (action) {
 
   }
 }
