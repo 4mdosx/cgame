@@ -3,12 +3,11 @@ import _ from 'lodash'
 
 class Task {
   constructor (params) {
-    this.id = params.id
     this.data = {
       type: params.type,
       schema: params.schema,
       stock: params.stock,
-      cost: params.cost,
+      proposal: params.proposal,
     }
     if (params.type === 'building') {
       this.schema = buildings[params.schema]
@@ -16,24 +15,31 @@ class Task {
       this.schema = {}
     }
 
-    this.status = 'pending' // pending, doing, done
-    this.update()
+    this.id = params.id
+    this.progress = params.progress || 0
+    this.total = this.schema.time || 1
+    this.status = params.status || 'pending' // pending, doing, done
+    if (!this.data.stock) this.initStock()
   }
 
   toJSON () {
-    return this.data
+    return {
+      ...this.data,
+      status: this.status,
+      progress: this.progress,
+      id: this.id,
+    }
   }
 
-  update () {
-    this.cost = _.cloneDeep(this.schema.cost) || {}
-    if (this.data.cost) {
-      Object.keys(this.data.cost).forEach(key => {
-        this.cost[key] = this.data.cost[key]
+  initStock () {
+    this.data.stock = []
+    Object.entries(this.schema.cost || []).forEach((key, val) => {
+      this.data.stock.push({
+        name: key,
+        count: 0,
+        max: val
       })
-    }
-
-    this.progress = 0
-    this.total = this.schema.time || 1
+    })
   }
 }
 
@@ -43,7 +49,7 @@ export class TaskModule  {
     this.queue = []
   }
 
-  dispatch (modules, action) {
+  dispatch (action) {
     switch (action.type) {
       case 'tick':
         break
@@ -54,15 +60,12 @@ export class TaskModule  {
 
   doProposal (proposalId) {
     const proposal = this.modules.inventory.proposals.find(proposal => proposal.id === proposalId)
-    console.log(proposal, proposalId)
     if (this.queue.find(task => task.id === proposal.id)) return
     this.queue.push(new Task({
       id: proposalId,
       type: proposal.type,
       schema: proposal.schema,
-      cost: {
-        proposal: proposalId
-      }
+      proposal: proposalId
     }))
   }
 
