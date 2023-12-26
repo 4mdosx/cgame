@@ -1,10 +1,11 @@
 import { Log } from '../log'
 class Character {
   constructor (params) {
-    const { profile = {} } = params
+    const { profile = {}, position = [0, 0] } = params
     this.profile = {
       name: profile.name || 'Neo',
     }
+    this.position = position
   }
 
   launch (task, modules) {
@@ -35,6 +36,7 @@ class Character {
   toJSON () {
     return {
       profile: this.profile,
+      position: this.position,
     }
   }
 }
@@ -46,7 +48,6 @@ export class CharacterModule  {
   }
 
   dispatch (action) {
-
     switch (action.type) {
       case 'work':
         this.characters.forEach(character => {

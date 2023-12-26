@@ -1,12 +1,14 @@
-import { useStore } from '@/store/main'
-import Overview from '@/container/overview.jsx'
 import { useState } from 'react'
+import { useStore } from '@/store/main'
+import Overview from './overview.jsx'
+import Resources from './resources.jsx'
 
 function Tabs (props) {
   const { onChange } = props
   return (
     <div>
       <span onClick={() => onChange('state')}>A Dark Where</span>
+      <span className='ml-2'  onClick={() => onChange('resources')}>Resources</span>
       <span className='ml-2' onClick={() => onChange('overview')}>Overview</span>
     </div>
   )
@@ -72,6 +74,7 @@ export default function State () {
       <Tabs activeTab={state.activeTab} onChange={activeTab => setState({ activeTab })} />
       <div className="tab_content">
         { state.activeTab === 'state' && <StateTabContent /> }
+        { state.activeTab === 'resources' && <Resources /> }
         { state.activeTab === 'overview' && <Overview /> }
       </div>
     </div>

@@ -1,7 +1,6 @@
 'use client'
 import Nav from '@/container/nav.jsx'
 import State from '@/container/state.jsx'
-import Console from '@/container/console.jsx'
 import Storage from '@/container/storage.jsx'
 import Game from '@/game/core/main.js'
 import React from 'react'
@@ -38,7 +37,6 @@ export default function Home() {
           <div className="basis-2/3">
             <State></State>
           </div>
-          <Console></Console>
         </div>
       </div>
       <div className="col-span-3 monitor_wrapper">

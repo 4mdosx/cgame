@@ -1,4 +1,5 @@
 import { materials } from "../schema/material"
+
 export class WorldModule  {
   name = 'world'
   constructor () {
@@ -48,8 +49,8 @@ export class WorldModule  {
     }
   }
 
-  init ({ map = {} }) {
-    this.map = map
+  init ({ world = {} }) {
+    Object.assign(this, world)
   }
 
   save() {
