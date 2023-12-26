@@ -1,4 +1,4 @@
-import { buildings } from '../schema/building'
+import { buildings, Building } from '../schema/building'
 import _ from 'lodash'
 
 class Task {
@@ -59,8 +59,13 @@ export class TaskModule  {
             if (task.data.type === 'building') {
               this.context.dispatch({
                 type: 'task/finish',
-                task
+                task,
+                building: new Building({
+                  status: 'normal',
+                  name: task.data.schema,
+                })
               })
+              this.context.dispatch({ type: 'system/sync' })
             }
           }
         }
@@ -86,7 +91,8 @@ export class TaskModule  {
   }
 
   init ({ task } = {}) {
-    if (task && task.queue) this.queue = task.queue.map(t => new Task(t))
+    if (!task) return
+    if (task.queue) this.queue = task.queue.map(t => new Task(t))
   }
 
   save () {

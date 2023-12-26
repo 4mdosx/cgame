@@ -1,31 +1,9 @@
-import { buildings } from '../schema/building'
-
-class Building {
-  constructor (data) {
-    this.data = data
-    this.schema = buildings[data.name]
-    this.create()
-  }
-
-  create () {}
-
-  toJSON () {
-    return this.data
-  }
-
-  get () {
-    return this.data
-  }
-}
-
+import { Building } from "../schema/building"
 export class HomeModule  {
   name = 'home'
   constructor () {
     this.blockStatus = {}
     this.buildings = []
-    this.overview = {
-      territorial_radius: 0
-    }
   }
 
   dispatch (action) {
@@ -33,10 +11,7 @@ export class HomeModule  {
       case 'task/finish':
         const task = action.task
         if (task.data.type === 'building') {
-          this.buildings.push(new Building({
-            status: 'normal',
-            name: task.data.schema,
-          }))
+          this.buildings.push(action.building)
         }
         break
       case 'tick':
@@ -48,13 +23,11 @@ export class HomeModule  {
   get () {
     return {
       buildings: this.buildings.map(building => building.get()),
-      overview: this.overview,
     }
   }
 
   init ({ home = {}}) {
-    Object.assign(this.overview, home.overview)
-    this.buildings = home.buildings.map(building => new Building(building))
+    if (home.buildings) this.buildings = home.buildings.map(building => new Building(building))
   }
 
   save () {

@@ -2,21 +2,15 @@ import { Log } from '../log'
 class Character {
   constructor (params) {
     const { profile = {} } = params
-    this.ap = 1
-    this.ap_increment = 0.1
-    this.ap_max = 1
     this.profile = {
       name: profile.name || 'Neo',
     }
   }
 
   launch (task, modules) {
-    this.recovery()
-    if (this.ap < 1) return
     if (!task) return
     if (task.status === 'done') return
 
-    this.ap--
     if (task.status === 'doing') {
       task.progress++
       if (task.progress >= task.total) {
@@ -38,11 +32,6 @@ class Character {
     }
   }
 
-  recovery () {
-    this.ap+= this.ap_increment
-    if (this.ap > this.ap_max) this.ap = this.ap_max
-  }
-
   toJSON () {
     return {
       profile: this.profile,
@@ -59,7 +48,7 @@ export class CharacterModule  {
   dispatch (action) {
 
     switch (action.type) {
-      case 'tick':
+      case 'work':
         this.characters.forEach(character => {
           character.launch(this.modules.task.queue[0], this.modules)
         })

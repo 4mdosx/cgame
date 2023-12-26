@@ -3,14 +3,14 @@ import { HomeModule } from './home'
 import { CharacterModule } from './character'
 import { TaskModule } from './task'
 import { InventoryModule } from './inventory'
-
+import { SystemModule } from './system'
 
 export default class Game {
   constructor({ render } = {}) {
     this.modules = {}
     this.stopMain = null
     this.lastTick = null
-    this.tickLength = 200
+    this.tickLength = 100
     this.render = render
     this.renderTime = performance.now()
     this.register('world', new WorldModule())
@@ -18,6 +18,7 @@ export default class Game {
     this.register('character', new CharacterModule())
     this.register('task', new TaskModule())
     this.register('inventory', new InventoryModule())
+    this.register('system', new SystemModule())
   }
 
   register(name, module) {
