@@ -1,3 +1,4 @@
+import { useStore } from '@/store/main.js'
 
 const Titles = [
   'Items'
@@ -12,10 +13,14 @@ function Header () {
   )
 }
 export default function Storage () {
+  const bears = useStore((state) => state.bears)
+
   return (
     <div className="storage">
       <Header />
-      <div className="test flex justify-between"></div>
+      <div className="test flex justify-between">
+        bears: {bears}
+      </div>
     </div>
   )
 }

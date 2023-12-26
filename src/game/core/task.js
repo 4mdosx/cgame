@@ -1,39 +1,103 @@
-import data from './data'
+import { buildings, Building } from '../schema/building'
+import _ from 'lodash'
 
-class BuildingTask {
-  constructor (buildingName) {
+class Task {
+  constructor (params) {
+    this.data = {
+      type: params.type,
+      schema: params.schema,
+      stock: params.stock,
+      proposal: params.proposal,
+    }
+    if (params.type === 'building') {
+      this.schema = buildings[params.schema]
+    } else {
+      this.schema = {}
+    }
 
+    this.id = params.id
+    this.progress = params.progress || 0
+    this.total = this.schema.time || 1
+    this.status = params.status || 'pending' // pending, doing, done
+    if (!this.data.stock) this.initStock()
+  }
+
+  toJSON () {
+    return {
+      ...this.data,
+      status: this.status,
+      progress: this.progress,
+      id: this.id,
+    }
+  }
+
+  initStock () {
+    this.data.stock = []
+    Object.entries(this.schema.cost || []).forEach((key, val) => {
+      this.data.stock.push({
+        name: key,
+        count: 0,
+        max: val
+      })
+    })
   }
 }
 
-// 任务调度,工作流
 export class TaskModule  {
   name = 'task'
   constructor () {
-    this.status = {}
+    this.queue = []
   }
 
-  dispatch (modules, action) {
+  dispatch (action) {
     switch (action.type) {
       case 'tick':
-        break
-      case 'task/building':
-        const building = data.search('building', action.buildingName)
+        if (this.queue[0]) {
+          const task = this.queue[0]
+          if (task.status === 'done') {
+            this.queue.shift()
+            if (task.data.type === 'building') {
+              this.context.dispatch({
+                type: 'task/finish',
+                task,
+                building: new Building({
+                  status: 'normal',
+                  name: task.data.schema,
+                })
+              })
+              this.context.dispatch({ type: 'system/sync' })
+            }
+          }
+        }
         break
       default:
         break
     }
   }
 
+  doProposal (proposalId) {
+    const proposal = this.modules.inventory.proposals.find(proposal => proposal.id === proposalId)
+    if (this.queue.find(task => task.id === proposal.id)) return
+    this.queue.push(new Task({
+      id: proposalId,
+      type: proposal.type,
+      schema: proposal.schema,
+      proposal: proposalId
+    }))
+  }
+
   get () {
     return this.status
   }
 
-  init (payload) {
-    this.status = payload.task
+  init ({ task } = {}) {
+    if (!task) return
+    if (task.queue) this.queue = task.queue.map(t => new Task(t))
   }
 
   save () {
-    return this.status
+    return {
+      queue: this.queue.map(task => task.toJSON()),
+    }
   }
 }

@@ -1,16 +1,26 @@
 import { create } from 'zustand'
-import { persist, createJSONStorage } from 'zustand/middleware'
 import { createHomeSlice } from './home'
 
-export const useStore = create(
-  persist(
-    (set, get) => ({
-      theme: 'adr',
-      ...createHomeSlice(set, get)
-    }),
-    {
-      name: 'the-sunken-ancient-world',
-      getStorage: () => createJSONStorage(),
-    }
-  )
-)
+export const useStore = create((set, get) => ({
+  theme: 'adr',
+  proposals: [],
+  items: [],
+  buildings: [],
+  overview: {},
+  ...createHomeSlice(set, get),
+  mapGameStatusToStore: (modules) => {
+    const { inventory, home, system } = modules
+    const { items, proposals } = inventory.get()
+    const { buildings } = home.get()
+
+    set({
+      items,
+      proposals,
+      buildings,
+      overview: {
+        store: system.store,
+        building_effect: system.building_effect,
+      }
+    })
+  }
+}))
