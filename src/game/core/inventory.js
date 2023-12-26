@@ -17,6 +17,8 @@ export class InventoryModule  {
           this.proposals = this.proposals.filter(proposal => proposal.id !== task.data.proposal)
         }
         break
+      case 'discovery':
+        break
       case 'tick':
         break
       default:
