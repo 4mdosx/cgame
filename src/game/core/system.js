@@ -34,6 +34,13 @@ export class SystemModule {
     }
   }
 
+  get(key) {
+    const val_s = this.store[key] || 0
+    if (typeof val_s !== 'number') return val_s
+    const val_b = this.building_effect[key] || 0
+    return val_b + val_s
+  }
+
   valueOf() {
     return {
       store: this.store
