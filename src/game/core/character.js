@@ -59,9 +59,9 @@ export class CharacterModule  {
     }
   }
 
-  get () {
+  valueOf () {
     return {
-      characters: this.characters,
+      characters: this.characters.map(character => character.toJSON()),
     }
   }
 
@@ -71,12 +71,6 @@ export class CharacterModule  {
       this.characters.push(new Character({}))
     } else {
       this.characters = characters.map(character => new Character(character))
-    }
-  }
-
-  save () {
-    return {
-      characters: this.characters.map(character => character.toJSON()),
     }
   }
 }

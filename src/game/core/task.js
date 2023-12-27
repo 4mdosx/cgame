@@ -86,18 +86,14 @@ export class TaskModule  {
     }))
   }
 
-  get () {
-    return this.status
+  valueOf () {
+    return {
+      queue: this.queue.map(task => task.toJSON()),
+    }
   }
 
   init ({ task } = {}) {
     if (!task) return
     if (task.queue) this.queue = task.queue.map(t => new Task(t))
-  }
-
-  save () {
-    return {
-      queue: this.queue.map(task => task.toJSON()),
-    }
   }
 }

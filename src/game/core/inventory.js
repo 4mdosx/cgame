@@ -25,7 +25,7 @@ export class InventoryModule  {
     }
   }
 
-  get () {
+  valueOf () {
     return {
       items: this.items,
       proposals: this.proposals,
@@ -42,9 +42,5 @@ export class InventoryModule  {
         schema: 'bonfire',
       })
     }
-  }
-
-  save() {
-    return this.get()
   }
 }

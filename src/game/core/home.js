@@ -20,18 +20,14 @@ export class HomeModule  {
     }
   }
 
-  get () {
-    return {
-      buildings: this.buildings.map(building => building.get()),
-    }
-  }
-
   init ({ home = {}}) {
     if (home.buildings) this.buildings = home.buildings.map(building => new Building(building))
   }
 
-  save () {
-    return this.get()
+  valueOf () {
+    return {
+      buildings: this.buildings.map(building => building.get()),
+    }
   }
 }
 

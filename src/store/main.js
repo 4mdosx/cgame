@@ -10,8 +10,8 @@ export const useStore = create((set, get) => ({
   ...createHomeSlice(set, get),
   mapGameStatusToStore: (modules) => {
     const { inventory, home, system } = modules
-    const { items, proposals } = inventory.get()
-    const { buildings } = home.get()
+    const { items, proposals } = inventory.valueOf()
+    const { buildings } = home.valueOf()
 
     set({
       items,

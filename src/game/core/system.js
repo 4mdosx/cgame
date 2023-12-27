@@ -34,7 +34,7 @@ export class SystemModule {
     }
   }
 
-  get() {
+  valueOf() {
     return {
       store: this.store
     }
@@ -43,9 +43,5 @@ export class SystemModule {
   init({ system } = {}) {
     if (!system) return
     if (system.store) Object.assign(this.store, system.store)
-  }
-
-  save() {
-    return this.get()
   }
 }

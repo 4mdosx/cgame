@@ -19,7 +19,7 @@ export default function Home() {
   }
 
   function save () {
-    localStorage.setItem('the-sunken-ancient-world', JSON.stringify(globalThis.game.snapShot()))
+    localStorage.setItem('the-sunken-ancient-world', JSON.stringify(globalThis.game.valueOf()))
   }
   function reset () {
     localStorage.removeItem('the-sunken-ancient-world')

@@ -43,7 +43,7 @@ export class WorldModule  {
     this.map[key].resources[name] += 1000
   }
 
-  get () {
+  valueOf () {
     return {
       map: this.map,
     }
@@ -51,9 +51,5 @@ export class WorldModule  {
 
   init ({ world = {} }) {
     Object.assign(this, world)
-  }
-
-  save() {
-    return this.get()
   }
 }
