@@ -59,6 +59,10 @@ export class CharacterModule  {
     }
   }
 
+  get me () {
+    return this.characters[0]
+  }
+
   valueOf () {
     return {
       characters: this.characters.map(character => character.toJSON()),

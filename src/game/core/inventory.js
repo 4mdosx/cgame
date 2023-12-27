@@ -11,6 +11,13 @@ export class InventoryModule  {
 
   dispatch (action) {
     switch (action.type) {
+      case 'character/gathering':
+        if (this.items[action.itemName]) {
+          this.items[action.itemName] += action.quantity
+        } else {
+          this.items[action.itemName] = action.quantity
+        }
+        break
       case 'task/finish':
         const task = action.task
         if (task.data.proposal) {
