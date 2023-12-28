@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useStore } from '@/store/main'
+import Buildings from './buildings.jsx'
 import Overview from './overview.jsx'
 import Resources from './resources.jsx'
 
@@ -43,23 +44,6 @@ function Proposals () {
         proposals.map((proposal) => {
           return (
             <ProposalButton key={proposal.id} {...proposal} />
-          )
-        })
-      }
-    </div>
-  )
-}
-
-function Buildings () {
-  const buildings = useStore(state => state.buildings)
-  return (
-    <div className='buildings'>
-      {
-        buildings.map((building) => {
-          return (
-            <div key={building.name}>
-              {building.name}
-            </div>
           )
         })
       }

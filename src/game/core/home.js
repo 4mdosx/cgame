@@ -1,4 +1,5 @@
 import { Building } from "../schema/building"
+
 export class HomeModule  {
   name = 'home'
   constructor () {
@@ -8,6 +9,10 @@ export class HomeModule  {
 
   dispatch (action) {
     switch (action.type) {
+      case 'building/event':
+        const building = this.buildings.find(building => building.data.name === action.name)
+        building[action.event] && building[action.event](action)
+        break
       case 'task/finish':
         const task = action.task
         if (task.data.type === 'building') {
@@ -26,7 +31,7 @@ export class HomeModule  {
 
   valueOf () {
     return {
-      buildings: this.buildings.map(building => building.get()),
+      buildings: this.buildings.map(building => building.valueOf()),
     }
   }
 }

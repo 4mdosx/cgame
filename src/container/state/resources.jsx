@@ -1,11 +1,11 @@
 import { getContext } from "@/game/utils"
+import { materials } from "@/game/schema/material"
 
 function ResourceButton (props) {
   const { name } = props
-
   return (
-    <div onClick={() => props.onGathering(name)}>
-      {name}
+    <div onClick={() => props.onGathering(name)} className="button resource">
+      <span className='name'>{materials[name].name}</span>
     </div>
   )
 }
@@ -23,7 +23,7 @@ function Resources (props) {
   }
 
   return (
-    <div>
+    <div className="grid grid-cols-3 gap-2">
       {
         Object.entries(block.resources).map(resource => {
           return (
@@ -46,10 +46,12 @@ export default function blockResources () {
   return (
     <div className='resources'>
       {
-        blocks.map(block => {
+        blocks.map((block, index) => {
           return (
             <div key={block[0]}>
-              <div>{block[0]}</div>
+              {
+                index === 0 ? null : <div>{block[0]}</div>
+              }
               <Resources position={block[0]} block={block[1]} />
             </div>
           )

@@ -1,5 +1,5 @@
 import { getGameStatus, getGameStore } from '@/game/utils/index.js'
-
+import { materials } from '../schema/material'
 export class InventoryModule  {
   name = 'inventory'
   constructor () {
@@ -31,6 +31,22 @@ export class InventoryModule  {
         break
       default:
     }
+  }
+
+  match (keyword) {
+    return Object.keys(this.items).map((key, val) => {
+      const material = materials[key]
+      if (!material) return false
+      if(material.keywords.includes(keyword)) return [key, material]
+      return false
+    }).filter(Boolean)
+  }
+
+  consume (itemName, quantity) {
+    if (!this.items[itemName]) return false
+    if (this.items[itemName] < quantity) return false
+    this.items[itemName] -= quantity
+    return true
   }
 
   valueOf () {

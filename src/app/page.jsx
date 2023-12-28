@@ -1,22 +1,23 @@
 'use client'
 import Nav from '@/container/nav.jsx'
-import State from '@/container/state.jsx'
+import State from '@/container/state/index.jsx'
 import Storage from '@/container/storage.jsx'
 import Game from '@/game/core/main.js'
-import React from 'react'
+import { useState, useEffect } from 'react'
 import { useStore } from '@/store/main'
 
 export default function Home() {
-  const [state, setState] = React.useState({})
+  const [state, setState] = useState({ inited: false })
   const render = useStore(state => state.mapGameStatusToStore)
-  if (!state.inited) {
-    window.addEventListener('load', () => {
+
+  useEffect(() => {
+    if (!state.inited) {
       globalThis.game = new Game({ render })
       const gameSave = JSON.parse(localStorage.getItem('the-sunken-ancient-world')) || {}
       globalThis.game.init(gameSave)
       setState({ inited: true })
-    })
-  }
+    }
+  }, [state.inited, setState, render])
 
   function save () {
     localStorage.setItem('the-sunken-ancient-world', JSON.stringify(globalThis.game.valueOf()))
@@ -26,9 +27,10 @@ export default function Home() {
     window.location.reload()
   }
   if (!state.inited) return <p>loading...</p>
+  setInterval(() => save(), 1000 * 120)
 
   return (
-    <main className="overview_page grid grid-cols-12 gap-4">
+    <main className="overview_page grid grid-cols-12 gap-4 pt-2">
       <div className="col-span-3 nav_wrapper">
         <Nav></Nav>
       </div>
@@ -45,7 +47,7 @@ export default function Home() {
           <Storage></Storage>
         </div>
       </div>
-      <footer className='fixed right-0 bottom-0'>
+      <footer className='fixed right-0 top-0'>
         <button onClick={save} className='mr-2'>save</button>
         <button onClick={reset}>reset</button>
       </footer>
