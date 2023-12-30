@@ -3,6 +3,7 @@ import Nav from '@/container/nav.jsx'
 import State from '@/container/state/index.jsx'
 import Storage from '@/container/storage.jsx'
 import Game from '@/game/core/main.js'
+import Console from '@/container/console'
 import { useState, useEffect } from 'react'
 import { useStore } from '@/store/main'
 
@@ -43,10 +44,10 @@ export default function Home() {
       </div>
       <div className="col-span-3 monitor_wrapper">
         <div className="grid grid-rows-2 gap-2 h-full">
-          {/* <Logs></Logs> */}
           <Storage></Storage>
         </div>
       </div>
+      <Console></Console>
       <footer className='fixed right-0 top-0'>
         <button onClick={save} className='mr-2'>save</button>
         <button onClick={reset}>reset</button>

@@ -1,39 +1,28 @@
-
-.simple_box
-  border-top: 2px solid #e5e7eb
-  box-sizing: border-box
-  position: relative
-  .header
-    position: absolute
-    top: -.8rem
-    background-color: #fff
-    padding: 0 .5rem
-
-
 .button
   display: flex
   border: 1px solid #888
+  border-bottom-width: 4px
   display: flex
   cursor: pointer
   padding: .5rem 0
   border-radius: .25rem
   width:  40%
   position: relative
+  transition: background-color 1s ease-out
+  &:hover
+    background-color: #ddd
+  &:active
+    border-bottom-width: 2px
+    top: 2px
   .name
     text-align: center
     width: 100%
+  &:active
+    border-bottom-width: 2px
+    top: 2px
 
 .button.building
   display: flex
-  border: 1px solid #888
-  display: flex
-  cursor: pointer
-  padding: .5rem 0
-  border-radius: .25rem
-  width:  40%
-  position: relative
-  &:hover
-    background-color: #F9F9F9
   .menu
     width: 4rem
     border-left: 1px solid #888
@@ -45,11 +34,11 @@
     width: 100%
     position: absolute
     height: 2px
-    background-color: #cb3837
+    background-color: #fc5d5d
     bottom: 0
     transition: width .5s ease-in-out
+    box-shadow: 0 0 5px #fc5d5d, 0 0 25px #fc5d5d, 0 0 50px #fc5d5d, 0 0 200px #fc5d5d
 
 .button.resource
   width: 120px
-  &:hover
-    background-color: #F9F9F9
+
