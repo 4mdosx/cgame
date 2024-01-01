@@ -1,5 +1,6 @@
 import { buildings } from '@/game/schema/building'
 import { getContext } from '@/game/utils'
+import { useState } from 'react'
 
 function FuelIndicator ({ building }) {
   const width = building.fuel.count / building.fuel.max * 100
@@ -8,14 +9,19 @@ function FuelIndicator ({ building }) {
   )
 }
 
-export default function BuildingButton({ building }) {
+function BonfireBuildingButton({ building }) {
   const schema = buildings[building.name]
+  const [active, setActive] = useState(false)
   const onEvent = (event) => {
     getContext().dispatch({ type: 'building/event', name: building.name, event })
+    setActive(true)
+    setTimeout(() => {
+      setActive(false)
+    }, 1000)
   }
 
   return (
-    <div className='button building'>
+    <div className={`button building ${building.name} ${active ? 'active' : ''}`}>
       <span className='name'>{schema.name}</span>
       {schema.menu.map((menu) => {
         return (
@@ -35,4 +41,42 @@ export default function BuildingButton({ building }) {
       }
     </div>
   )
+}
+
+function BaseBuildingButton({ building }) {
+  const schema = buildings[building.name]
+  const onEvent = (event) => {
+    getContext().dispatch({ type: 'building/event', name: building.name, event })
+  }
+
+  return (
+    <div className={`button building ${building.name}`}>
+      <span className='name'>{schema.name}</span>
+      {schema.menu.map((menu) => {
+        return (
+          <div
+            className='menu'
+            key={menu.name}
+            onClick={() => {
+              onEvent(menu.event)
+            }}
+          >
+            {menu.name}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+const buildingMap = {
+  bonfire: BonfireBuildingButton
+}
+export default function BuildingButton({ building }) {
+  const name = building.name
+  if (buildingMap[name]) {
+    return buildingMap[name]({ building })
+  }
+
+  return <BaseBuildingButton building={building} />
 }
