@@ -11,17 +11,17 @@ function FuelIndicator ({ building }) {
 
 function BonfireBuildingButton({ building }) {
   const schema = buildings[building.name]
-  const [active, setActive] = useState(false)
+  const [animated, setAnimated] = useState(false)
   const onEvent = (event) => {
     getContext().dispatch({ type: 'building/event', name: building.name, event })
-    setActive(true)
+    setAnimated(true)
     setTimeout(() => {
-      setActive(false)
+      setAnimated(false)
     }, 1000)
   }
 
   return (
-    <div className={`button building ${building.name} ${active ? 'active' : ''}`}>
+    <div className={`button building ${building.name} ${animated ? 'animated' : ''}`}>
       <span className='name'>{schema.name}</span>
       {schema.menu.map((menu) => {
         return (
