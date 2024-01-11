@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useStore } from '@/store/main'
+import Proposals from './proposals.jsx'
 import Buildings from './buildings.jsx'
 import Overview from './overview.jsx'
 import Resources from './resources.jsx'
@@ -15,18 +15,6 @@ function Tabs (props) {
   )
 }
 
-function ProposalButton (props) {
-  const { id, schema, type } = props
-  function exec () {
-    globalThis.game.modules.task.doProposal(id)
-  }
-  return (
-    <div onClick={exec}>
-      {type}: {schema}
-    </div>
-  )
-}
-
 function StateTabContent () {
   return (
     <div className='state'>
@@ -36,20 +24,6 @@ function StateTabContent () {
   )
 }
 
-function Proposals () {
-  const proposals = useStore(state => state.proposals)
-  return (
-    <div className='proposals'>
-      {
-        proposals.map((proposal) => {
-          return (
-            <ProposalButton key={proposal.id} {...proposal} />
-          )
-        })
-      }
-    </div>
-  )
-}
 
 export default function State () {
   const [state, setState] = useState({ activeTab: 'state' })

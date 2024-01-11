@@ -6,22 +6,18 @@ export class InventoryModule  {
     this.items = {}
     this.proposals = []
     this.blueprints = []
-    this.artifacts = []
   }
 
   dispatch (action) {
     switch (action.type) {
       case 'character/gathering':
-        const { itemName, quantity } = action
+        const { itemName } = action
         if (!this.items[itemName]) this.items[itemName] = 0
         if (this.items[itemName] > getGameStatus('MAX_STORAGE/' + itemName)) return
         this.items[action.itemName] += action.quantity
         break
-      case 'task/finish':
-        const task = action.task
-        if (task.data.proposal) {
-          this.proposals = this.proposals.filter(proposal => proposal.id !== task.data.proposal)
-        }
+      case 'inventory/removeProposal':
+        this.proposals = this.proposals.filter(proposal => proposal.id !== action.proposalId)
         break
       case 'discovery':
         const store = getGameStore()
@@ -49,10 +45,18 @@ export class InventoryModule  {
     return true
   }
 
+  addProposal (proposal) {
+    if (this.proposals.find(p => p.id === proposal.id)) return
+    if (this.proposals.length === 3) {
+      this.proposals.shift()
+    }
+    this.proposals.push(proposal)
+  }
+
   valueOf () {
     return {
       items: this.items,
-      proposals: this.proposals,
+      proposals: [...this.proposals],
       blueprints: this.blueprints,
     }
   }

@@ -13,11 +13,8 @@ export class HomeModule  {
         const building = this.buildings.find(building => building.data.name === action.name)
         building[action.event] && building[action.event](action)
         break
-      case 'task/finish':
-        const task = action.task
-        if (task.data.type === 'building') {
-          this.buildings.push(action.building)
-        }
+      case 'building/completed':
+        if (!action.is_upgrade) this.buildings.push(action.building)
         break
       case 'tick':
         break

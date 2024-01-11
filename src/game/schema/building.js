@@ -11,7 +11,18 @@ export const buildings = {
       name: '添柴',
       event: 'add_fuel',
     }]
-  }
+  },
+  workbench: {
+    name: '工作台',
+    size: 'standard',
+    keywords: ['workbench'],
+    cost: {
+      wood: 10,
+    },
+    time: 1,
+    effect: {},
+    menu: []
+  },
 }
 
 export class Building {

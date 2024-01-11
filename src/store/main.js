@@ -11,15 +11,14 @@ export const useStore = create((set, get) => ({
     const { inventory, home, system } = modules
     const { items, proposals } = inventory.valueOf()
     const { buildings } = home.valueOf()
+    const { store, cyborg } = system.valueOf()
 
     set({
       items: Object.entries(items),
       proposals,
       buildings,
-      overview: {
-        store: system.store,
-        building_effect: system.building_effect,
-      }
+      store,
+      cyborg
     })
   }
 }))
