@@ -1,4 +1,4 @@
-import { Building } from "../schema/building"
+import { Building } from "../class/building"
 
 export class HomeModule  {
   name = 'home'

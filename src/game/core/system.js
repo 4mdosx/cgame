@@ -12,8 +12,8 @@ export class SystemModule {
     }
     this.cyborg = {
       mem: { val: 0, max: 64, unit: 'KB' },
-      power: { val: 0, max: 1, rate: 0.1, unit: 'point' },
-      performance: { val: 0, max: 1, rate: 1, unit: 'point' },
+      power: { val: 0, max: 1, recovery: true, unit: 'point' },
+      performance: { val: 0, max: 1, recovery: true, unit: 'point' },
     }
   }
 
@@ -34,6 +34,7 @@ export class SystemModule {
         this.store['building/' + action.building.data.name] = true
         break
       case 'system/sync':
+        this.building_buff = {}
         this.modules.home.buildings.forEach(building => {
           const effect = building.getEffect()
           if (!effect) return
@@ -54,8 +55,8 @@ export class SystemModule {
     // 更新库存
     Object.entries(this.cyborg).forEach(([key, val]) => {
       if (val.val >= val.max) return
-      if (val.rate) {
-        this.cyborg[key].val += val.rate
+      if (val.recovery) {
+        this.cyborg[key].val += this.get('recovery_rate/' + key)
       }
       if (val.val > val.max) {
         this.cyborg[key].val = val.max
@@ -83,7 +84,6 @@ export class SystemModule {
     const index = Math.floor(Math.random() * proposal.length)
     const item = proposal[index]
     const proposal_schema = proposals[item.category].find(proposal => proposal.id === item.id)
-    console.log('research', proposal_schema)
 
     this.modules.inventory.addProposal(proposal_schema)
   }

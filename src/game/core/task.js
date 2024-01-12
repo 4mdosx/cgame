@@ -1,4 +1,5 @@
-import { buildings, Building } from '../schema/building'
+import { buildings } from '../schema/building'
+import { Building } from '../class/building'
 import { buildingIsExist } from '../interface'
 import _ from 'lodash'
 
