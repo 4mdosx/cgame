@@ -65,6 +65,16 @@ export default class Game {
     }
   }
 
+  stop () {
+    clearTimeout(this.stopMain)
+    this.stopMain = setInterval(() => this.render(this.modules), this.tickLength)
+  }
+
+  start () {
+    clearInterval(this.stopMain)
+    this.main(performance.now())
+  }
+
   dispatch(action) {
     Object.values(this.modules).forEach((module) => {
       module.dispatch && module.dispatch(action)
