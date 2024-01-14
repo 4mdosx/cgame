@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Proposals from './proposals.jsx'
+import Tasks from './tasks.jsx'
 import Buildings from './buildings.jsx'
 import Overview from './overview.jsx'
 import Resources from './resources.jsx'
@@ -19,6 +20,7 @@ function StateTabContent () {
   return (
     <div className='state'>
       <Proposals />
+      <Tasks />
       <Buildings />
     </div>
   )

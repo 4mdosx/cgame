@@ -38,6 +38,7 @@ class Task {
       ...this.data,
       status: this.status,
       progress: this.progress,
+      total: this.total,
       id: this.id,
     }
   }
