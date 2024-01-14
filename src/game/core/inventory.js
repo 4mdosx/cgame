@@ -45,6 +45,17 @@ export class InventoryModule  {
     return true
   }
 
+  take (itemName, quantity) {
+    if (!this.items[itemName]) return 0
+    if (this.items[itemName] < quantity) {
+      const count = this.items[itemName]
+      this.items[itemName] = 0
+      return count
+    }
+    this.items[itemName] -= quantity
+    return quantity
+  }
+
   addProposal (proposal) {
     if (this.proposals.find(p => p.id === proposal.id)) return
     if (this.proposals.length === 3) {

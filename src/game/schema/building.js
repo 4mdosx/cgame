@@ -10,6 +10,11 @@ export const buildings = {
         return building.level * 0.1
       }
     },
+    cost: {
+      wood: buildings => {
+        return (1.3 ** buildings.level) * 10
+      },
+    },
     menu: [{
       name: '添柴',
       event: 'add_fuel',
@@ -19,8 +24,11 @@ export const buildings = {
     name: '工作台',
     size: 'standard',
     keywords: ['workbench'],
+    time: 10,
     cost: {
-      wood: 10,
+      wood: buildings => {
+        return (1.3 ** buildings.level) * 10
+      },
     },
     time: 1,
     effect: {},

@@ -9,5 +9,10 @@ export function getGameStatus (key) {
 }
 
 export function buildingIsExist (schemaName) {
-  return getGameStatus('buildings/' + schemaName)
+  return getGameStatus('building/' + schemaName)
 }
+
+export function getBuilding (schemaName) {
+  return getContext().modules.home.buildings.find(building => building.data.name === schemaName)
+}
+

@@ -20,12 +20,11 @@ class Character {
       }
     }
     if (task.status === 'pending') {
-      const required = task.data.stock.filter(stock => stock.count < stock.max)
-      if (required.length > 0) {
-        required.forEach(item => {
-          const count = modules.inventory.take(item.name, item.max - item.count)
-          stock.count += count
-        })
+      const requires = task.data.stock.filter(stock => stock.count < stock.max)
+      if (requires.length > 0) {
+        const item = requires[0]
+        const count = modules.inventory.take(item.name, item.max - item.count)
+        stock.count += count
       } else {
         Log.info(`${this.profile.name} doing ${task.schema.name}/${task.id}`)
         task.status = 'doing'

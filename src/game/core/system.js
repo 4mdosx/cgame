@@ -1,8 +1,10 @@
 import proposals from "../schema/proposal"
+import { Log } from "../log"
+import { getBuilding } from '../interface'
 export class SystemModule {
   name = 'system'
   constructor() {
-    this.building_buff = {}
+    this.building_effect = {}
     this.tick_count = 0
     this.store = {
       territorial_radius: 0
@@ -34,15 +36,15 @@ export class SystemModule {
         this.store['building/' + action.building.data.name] = true
         break
       case 'system/sync':
-        this.building_buff = {}
+        this.building_effect = {}
         this.modules.home.buildings.forEach(building => {
-          const effect = building.getEffect()
+          const effect = building.effect
           if (!effect) return
           Object.entries(effect).forEach(([key, val]) => {
-            if (this.building_buff[key]) {
-              this.building_buff[key] += val
+            if (this.building_effect[key]) {
+              this.building_effect[key] += val
             } else {
-              this.building_buff[key] = val
+              this.building_effect[key] = val
             }
           })
         })
@@ -91,7 +93,7 @@ export class SystemModule {
   get(key) {
     const val_s = this.store[key] || 0
     if (typeof val_s !== 'number') return val_s
-    const val_b = this.building_buff[key] || 0
+    const val_b = this.building_effect[key] || 0
     return val_b + val_s
   }
 

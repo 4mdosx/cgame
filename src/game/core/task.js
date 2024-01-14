@@ -1,6 +1,6 @@
 import { buildings } from '../schema/building'
 import { Building } from '../class/building'
-import { buildingIsExist } from '../interface'
+import { buildingIsExist, getBuilding } from '../interface'
 import _ from 'lodash'
 
 class Task {
@@ -21,7 +21,16 @@ class Task {
     this.progress = params.progress || 0
     this.total = this.schema.time || 1
     this.status = params.status || 'pending' // pending, doing, done
-    if (!this.data.stock) this.initStock()
+    if (this.data.type === 'building') {
+      const building = getBuilding(this.data.schema)
+      if (building) {
+        this.initStock(building.cost)
+        this.total = building.time
+      } else {
+        if (this.schema.name == 'bonfire') this.initStock({})
+        else this.initStock(this.schema.cost)
+      }
+    }
   }
 
   toJSON () {
@@ -33,9 +42,9 @@ class Task {
     }
   }
 
-  initStock () {
+  initStock (cost = {}) {
     this.data.stock = []
-    Object.entries(this.schema.cost || []).forEach((key, val) => {
+    Object.entries(cost).forEach((key, val) => {
       this.data.stock.push({
         name: key,
         count: 0,
@@ -87,8 +96,7 @@ export class TaskModule  {
       id: proposalId,
       type: proposal.type,
       schema: proposal.schema,
-      proposal: proposalId,
-      is_upgrade: buildingIsExist(proposal.schema),
+      proposal: proposalId
     }))
   }
 
