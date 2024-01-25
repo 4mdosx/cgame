@@ -1,4 +1,5 @@
 import { Building } from "../class/building"
+import { getBuilding } from "../interface"
 
 export class HomeModule  {
   name = 'home'
@@ -9,13 +10,17 @@ export class HomeModule  {
 
   dispatch (action) {
     switch (action.type) {
-      case 'building/event':
-        const building = this.buildings.find(building => building.data.name === action.name)
+      case 'building/event': {
+        const building = getBuilding(action.name)
         building[action.event] && building[action.event](action)
         break
-      case 'building/completed':
-        if (!action.is_upgrade) this.buildings.push(action.building)
+      }
+      case 'building/completed': {
+        const building = getBuilding(action.name)
+        if (building) building.upgrade()
+        else this.buildings.push(new Building({ name: action.name, status: 'normal', }))
         break
+      }
       case 'tick':
         break
       default:

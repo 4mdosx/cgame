@@ -1,5 +1,5 @@
 import { useStore } from '@/store/main.js'
-import { getGameStatus } from '@/game/utils/index.js'
+import { getGameStatus } from '@/game/interface/index.js'
 
 export default function Storage () {
   const items = useStore((state) => state.items)

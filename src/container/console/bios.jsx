@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useStore } from '@/store/main'
-import { getContext } from '@/game/utils'
+import { getContext } from '@/game/interface/index'
 
 export default function BIOS () {
   const [focus, setFocus] = useState(false)

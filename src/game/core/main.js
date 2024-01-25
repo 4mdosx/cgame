@@ -25,6 +25,9 @@ export default class Game {
     module.context = this
     module.modules = this.modules
     this.modules[name] = module
+    if (name === 'system') {
+      this.system = module
+    }
   }
 
   init(payload = {}, params = {}) {

@@ -1,11 +1,11 @@
-import { getGameStatus, getGameStore } from '@/game/utils/index.js'
+import { getGameStatus } from '@/game/interface/index.js'
 import { materials } from '../schema/material'
+
 export class InventoryModule  {
   name = 'inventory'
   constructor () {
     this.items = {}
     this.proposals = []
-    this.blueprints = []
   }
 
   dispatch (action) {
@@ -16,12 +16,32 @@ export class InventoryModule  {
         if (this.items[itemName] > getGameStatus('MAX_STORAGE/' + itemName)) return
         this.items[action.itemName] += action.quantity
         break
-      case 'inventory/removeProposal':
-        this.proposals = this.proposals.filter(proposal => proposal.id !== action.proposalId)
+      case 'inventory/proposal/add': {
+        const { proposal } = action
+        this.consume('ora', proposal)
+        this.proposals = this.proposals.filter(p => p.id !== proposal.id)
+        if (this.proposals.length === 3) {
+          this.proposals.pop()
+        }
+        this.proposals.unshift(proposal)
         break
-      case 'discovery':
-        const store = getGameStore()
-        if (!store['MAX_STORAGE/' + action.name]) store['MAX_STORAGE/' + action.name] = 100
+      }
+      case 'inventory/proposal/accept': {
+        const { proposalId } = action
+        const proposal = this.proposals.find(proposal => proposal.id === proposalId)
+        if (!proposal) return
+        this.context.dispatch({
+          type: 'task/create',
+          proposal
+        })
+        this.dispatch({
+          type: 'inventory/proposal/remove',
+          proposalId
+        })
+        break
+      }
+      case 'inventory/proposal/remove':
+        this.proposals = this.proposals.filter(proposal => proposal.id !== action.proposalId)
         break
       case 'tick':
         break
@@ -30,7 +50,8 @@ export class InventoryModule  {
   }
 
   match (keyword) {
-    return Object.keys(this.items).map((key, val) => {
+    return Object.entries(this.items).map(([key, val]) => {
+      if (val < 1) return false
       const material = materials[key]
       if (!material) return false
       if(material.keywords.includes(keyword)) return [key, material]
@@ -56,19 +77,10 @@ export class InventoryModule  {
     return quantity
   }
 
-  addProposal (proposal) {
-    if (this.proposals.find(p => p.id === proposal.id)) return
-    if (this.proposals.length === 3) {
-      this.proposals.shift()
-    }
-    this.proposals.push(proposal)
-  }
-
   valueOf () {
     return {
       items: this.items,
       proposals: [...this.proposals],
-      blueprints: this.blueprints,
     }
   }
 
@@ -79,6 +91,7 @@ export class InventoryModule  {
         id: 'bonfire',
         type: 'building',
         schema: 'bonfire',
+        extra: { free: true }
       })
     }
   }

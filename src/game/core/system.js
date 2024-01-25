@@ -1,18 +1,19 @@
-import proposals from "../schema/proposal"
+import { proposals } from "../schema/proposal"
+import { research } from "../schema/research"
 import { Log } from "../log"
-import { getBuilding } from '../interface'
+import { dispatch } from '../interface'
+
 export class SystemModule {
   name = 'system'
   constructor() {
     this.building_effect = {}
     this.tick_count = 0
     this.store = {
+      categories: ['common'],
       territorial_radius: 0
     }
-    this.tech = {
-      categories: ['common'],
-    }
     this.cyborg = {
+      apps: [],
       mem: { val: 0, max: 64, unit: 'KB' },
       power: { val: 0, max: 1, recovery: true, unit: 'point' },
       performance: { val: 0, max: 1, recovery: true, unit: 'point' },
@@ -33,8 +34,28 @@ export class SystemModule {
         this.research()
         break
       case 'building/completed':
-        this.store['building/' + action.building.data.name] = true
+        this.store['building/' + action.name] = true
         break
+      case 'research/completed': {
+        const r = research[action.name]
+        if (!r) return
+        r.finish && r.finish(this.context)
+        dispatch({ type: 'store/update', name: 'RESEARCH/' + action.name, val: 1 })
+        if (!this.get(['MAX_STORAGE/' + action.name])) break
+        dispatch({ type: 'store/update', name: 'MAX_STORAGE/' + action.name, val: r.max || 1 })
+        break
+      }
+      case 'discovery':
+        if (!this.get(['MAX_STORAGE/' + action.name])) {
+          dispatch({ type: 'store/update', name: 'MAX_STORAGE/' + action.name, val: 100 })
+        }
+        break
+      case 'store/update': {
+        const { name, val } = action
+        if (!this.store[name]) this.store[name] = 0
+        this.store[name] += val
+        break
+      }
       case 'system/sync':
         this.building_effect = {}
         this.modules.home.buildings.forEach(building => {
@@ -54,7 +75,7 @@ export class SystemModule {
   }
 
   update () {
-    // 更新库存
+    // 更新虚拟性能
     Object.entries(this.cyborg).forEach(([key, val]) => {
       if (val.val >= val.max) return
       if (val.recovery) {
@@ -67,14 +88,14 @@ export class SystemModule {
   }
 
   research () {
-    if (this.cyborg.power.val < 1) return
-    this.cyborg.power.val -= 1
+    // if (this.cyborg.power.val < 1) return
+    // this.cyborg.power.val -= 1
     // 初始化卡池
-    const proposal = []
+    const pools = []
     Object.entries(proposals).forEach(([key, val]) => {
-      if (this.tech.categories.includes(key)) {
+      if (this.store.categories.includes(key)) {
         val.forEach(item => {
-          proposal.push({
+          pools.push({
             category: key,
             id: item.id,
           })
@@ -83,11 +104,20 @@ export class SystemModule {
     })
 
     // 随机抽取
-    const index = Math.floor(Math.random() * proposal.length)
-    const item = proposal[index]
+    const index = Math.floor(Math.random() * pools.length)
+    const item = pools[index]
     const proposal_schema = proposals[item.category].find(proposal => proposal.id === item.id)
 
-    this.modules.inventory.addProposal(proposal_schema)
+    // 检查是否达到最大等级
+    if (proposal_schema.type === 'research') {
+      if (this.get(['RESEARCH/' + proposal_schema.schema]) && this.get(['RESEARCH/' + proposal_schema.schema]) >= this.get('MAX_STORAGE/' + proposal_schema.schema)) {
+        Log.info('研究到了新的技术：' + proposal_schema.schema + '，但是已经达到了最大等级')
+        return
+      }
+    }
+
+    Log.info('研究到了新的技术：' + proposal_schema.schema)
+    dispatch({ type: 'inventory/proposal/add', proposal: proposal_schema })
   }
 
   get(key) {
@@ -100,15 +130,13 @@ export class SystemModule {
   valueOf() {
     return {
       store: this.store,
-      tech: this.tech,
-      cyborg: { ...this.cyborg },
+      cyborg: this.cyborg,
     }
   }
 
   init({ system } = {}) {
     if (!system) return
     if (system.store) Object.assign(this.store, system.store)
-    if (system.tech) Object.assign(this.tech, system.tech)
     if (system.cyborg) Object.assign(this.cyborg, system.cyborg)
   }
 }

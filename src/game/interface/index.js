@@ -1,11 +1,20 @@
-import { getContext } from '@/game/utils'
+export function getContext () {
+  return globalThis.game
+}
 
-export function doProposal (proposalId) {
-  return getContext().modules.task.doProposal(proposalId)
+export function dispatch (action) {
+  return getContext().dispatch(action)
+}
+
+export function acceptProposal (proposalId) {
+  return dispatch({
+    type: 'inventory/proposal/accept',
+    proposalId
+  })
 }
 
 export function getGameStatus (key) {
-  return getContext().modules.system.get(key)
+  return getContext().system.get(key)
 }
 
 export function buildingIsExist (schemaName) {
@@ -15,4 +24,3 @@ export function buildingIsExist (schemaName) {
 export function getBuilding (schemaName) {
   return getContext().modules.home.buildings.find(building => building.data.name === schemaName)
 }
-

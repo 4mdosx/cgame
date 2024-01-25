@@ -1,4 +1,4 @@
-import { getContext } from "@/game/utils"
+import { getContext, dispatch } from "@/game/interface"
 import { materials } from "@/game/schema/material"
 
 function ResourceButton (props) {
@@ -13,7 +13,7 @@ function ResourceButton (props) {
 function Resources (props) {
   const { position, block } = props
   function gathering (name) {
-    getContext().dispatch({
+    dispatch({
       type: 'character/gathering',
       position,
       itemName: name,

@@ -1,5 +1,5 @@
 import { buildings } from '@/game/schema/building'
-import { getContext } from '@/game/utils'
+import { getContext } from '@/game/interface/index'
 import { useState } from 'react'
 
 function FuelIndicator ({ building }) {

@@ -5,9 +5,11 @@ function TaskRow (props) {
   const summary = () => {
     switch (type) {
       case 'building':
-        return 'Building ' + schema
+        return '🛠️' + schema
+      case 'research':
+        return '📚' + schema
       default:
-        return 'Unknown'
+        return '💻'
     }
   }
   const progressText = () => {

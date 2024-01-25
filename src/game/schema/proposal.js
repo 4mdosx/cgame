@@ -1,5 +1,16 @@
 
-export const common = [{
+export const common = {
+  building: {
+    bonfire: {},
+    workbench: {},
+  },
+  feature: {
+    application: {}
+  },
+}
+
+
+[{
   id: 'common_b_1',
   type: 'building',
   schema: 'bonfire',
@@ -7,8 +18,25 @@ export const common = [{
   id: 'common_b_2',
   type: 'building',
   schema: 'workbench',
+}, {
+  id: 'common_s_1',
+  type: 'research',
+  schema: 'feature/application',
+  data: {
+    label: '功能：应用程序',
+    action: '解锁'
+  },
 }]
 
+export const application = [{
+  id: 'application_s_1',
+  type: 'research',
+  schema: 'app/automator',
+  data: {
+    label: '应用程序：automator',
+    action: '下载'
+  },
+}]
 
 export const category = [{
     id: 'common',
@@ -33,8 +61,6 @@ export const category = [{
   }
 ]
 
-const proposals = {
+export const proposals = {
   common,
 }
-
-export default proposals

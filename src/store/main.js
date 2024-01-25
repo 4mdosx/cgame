@@ -19,7 +19,7 @@ export const useStore = create((set, get) => ({
       proposals,
       buildings,
       store,
-      cyborg,
+      cyborg: { ...cyborg },
       queue
     })
   }

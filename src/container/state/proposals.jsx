@@ -1,22 +1,34 @@
 import { useStore } from '@/store/main'
-import { doProposal, buildingIsExist } from '@/game/interface'
+import { acceptProposal, buildingIsExist } from '@/game/interface'
 
 function ProposalRow (props) {
-  const { id, schema, type } = props
+  const { id, schema, type, data = {} } = props
   if (type === 'building') {
     const isExist = buildingIsExist(schema)
     return (
       <div className='proposal-item'>
         { schema }
-        <button onClick={() => doProposal(id)}>
+        <button onClick={() => acceptProposal(id)}>
           { isExist ? 'Upgrade' : 'Build'}
+        </button>
+      </div>
+    )
+  }
+  if (type === 'research') {
+    return (
+      <div className='proposal-item'>
+        <span>
+          { data.label || schema }
+        </span>
+        <button onClick={() => acceptProposal(id)} className='capitalize'>
+          { data.action }
         </button>
       </div>
     )
   }
 
   return (
-    <div onClick={() => doProposal(id)}>
+    <div onClick={() => acceptProposal(id)}>
       {type}: {schema}
     </div>
   )
