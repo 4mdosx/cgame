@@ -1,16 +1,5 @@
 
-export const common = {
-  building: {
-    bonfire: {},
-    workbench: {},
-  },
-  feature: {
-    application: {}
-  },
-}
-
-
-[{
+export const common = [{
   id: 'common_b_1',
   type: 'building',
   schema: 'bonfire',
