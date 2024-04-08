@@ -1,7 +1,7 @@
 import './globals.sass'
 
 export const metadata = {
-  title: 'Idle game of a adrowned world',
+  title: 'A computer game',
 }
 
 export default function RootLayout({ children }) {
