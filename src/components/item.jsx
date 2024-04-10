@@ -1,4 +1,4 @@
-import { useStore } from '@/game/core/main'
+import { useStore } from '@/back/core/main'
 
 export default function BonfireButton() {
   const bonfire = useStore((state) => state['building/bonfire'])
