@@ -1,5 +1,5 @@
-import React, { useRef, useEffect } from "react"
-import { Application, Assets, Point, Sprite, Container, Graphics } from 'pixi.js'
+import React, { useRef, useEffect, createRef } from "react"
+import { Application, Assets, Point, Sprite, Container, Graphics, Renderer } from 'pixi.js'
 import '@pixi/events'
 
 async function cacheAssets () {
@@ -10,8 +10,13 @@ async function cacheAssets () {
 await Assets.load(assets)
 }
 
+interface TileData {
+  x: number
+  y: number
+  tileId: string
+}
 async function loadMap (size: Point) {
-  const mapData = []
+  const mapData: TileData[] = []
   for (let y = 0; y < size.y; y++) {
     for (let x = 0; x < size.x; x++) {
       mapData.push({ x, y, tileId: 'tile_grid' })
@@ -119,13 +124,14 @@ async function initGames (app) {
   })
 }
 export default function WorldMap() {
-  const appRef = useRef(null)
-  const domRef = useRef(null)
+  const appRef = useRef<Application<Renderer>>()
+  const domRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
     if (appRef.current) return
+    if (!domRef.current) return
     const app = new Application()
     app.init({ background: '#444d56', width: 640, height: 480 }).then(async () => {
-      domRef.current.appendChild(app.canvas)
+      domRef.current!!.appendChild(app.canvas)
       initGames(app)
     })
     appRef.current = app
