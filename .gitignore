@@ -39,4 +39,5 @@ next-env.d.ts
 yarn.lock
 
 # dump
+.env
 .back
