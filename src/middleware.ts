@@ -10,5 +10,5 @@ export default auth((req) => {
 })
 
 export const config = {
-  matcher: ['/cgame/:path*', '/api/cgame/:path*'],
+  matcher: ['/cgame/:path*', '/api/cgame/:path*', '/session/:path*'],
 }

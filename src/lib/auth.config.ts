@@ -1,5 +1,5 @@
 import { NextAuthConfig } from 'next-auth'
-
+import { NextResponse } from 'next/server'
 export const authConfig = {
   pages: {
     signIn: '/login',
@@ -11,13 +11,11 @@ export const authConfig = {
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       let isLoggedIn = !!auth?.user
-      let isProtected = nextUrl.pathname.startsWith('/cgame')
+      let isProtected = nextUrl.pathname.startsWith('/cgame') || nextUrl.pathname.startsWith('/session')
 
       if (isProtected) {
         if (isLoggedIn) return true
-        return false // Redirect unauthenticated users to login page
-      } else if (isLoggedIn) {
-        return Response.redirect(new URL('/cgame', nextUrl))
+        return false
       }
 
       return true

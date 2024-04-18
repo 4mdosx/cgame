@@ -1,15 +1,33 @@
 @tailwind base
 @tailwind components
 @tailwind utilities
-@import './components.sass'
 
-body
-  background: #fff
+@import '@radix-ui/themes/styles.css'
 
-main.overview_page
-  min-height: 100vh
-  flex-direction: column
-  max-width: 840px
-  margin: auto
+@import 'bootstrap-icons/font/bootstrap-icons.css'
 
+:root
+  --nav-bg-color: rgb(245, 242, 241)
 
+html
+  color: rgb(18, 23, 43)
+  background-color: rgb(245, 242, 241)
+
+.icon
+  font-size: 1.5rem
+  vertical-align: middle
+  margin-right: 0.5rem
+
+.text-shadow-emerald-500
+  text-shadow: 1px 1px 1px rgb(16, 185, 129)
+
+.radix-themes
+  --cursor-button: pointer
+  --cursor-checkbox: pointer
+  --cursor-disabled: default
+  --cursor-link: pointer
+  --cursor-menu-item: pointer
+  --cursor-radio: pointer
+  --cursor-slider-thumb: grab
+  --cursor-slider-thumb-active: grabbing
+  --cursor-switch: pointer
