@@ -4,32 +4,64 @@ async function main() {
   const password = process.env.INIT_PASSWORD_HASH!
 
   const response = await Promise.all([
-    prisma.users.upsert({
+    prisma.user.upsert({
       where: { email: 'rauchg@vercel.com' },
       update: {},
       create: {
-        name: 'Guillermo Rauch',
         email: 'rauchg@vercel.com',
         password
       },
     }),
-    prisma.users.upsert({
+    prisma.user.upsert({
       where: { email: 'lee@vercel.com' },
       update: {},
       create: {
-        name: 'Lee Robinson',
         email: 'lee@vercel.com',
         password
       },
     }),
-    await prisma.users.upsert({
+    prisma.user.upsert({
       where: { email: 'stey@vercel.com' },
       update: {},
       create: {
-        name: 'Steven Tey',
         email: 'stey@vercel.com',
         password
       },
+    }),
+  ])
+  await Promise.all([
+    prisma.ghost.upsert({
+      where: { userId: 1 },
+      update: {},
+      create: {
+        userId: 1,
+        name: 'Guillermo Rauch',
+        credit: 100,
+        tech: {},
+        overview: {}
+      }
+    }),
+    prisma.ghost.upsert({
+      where: { userId: 2 },
+      update: {},
+      create: {
+        userId: 2,
+        name: 'Lee Robinson',
+        credit: 100,
+        tech: {},
+        overview: {}
+      }
+    }),
+    prisma.ghost.upsert({
+      where: { userId: 3 },
+      update: {},
+      create: {
+        userId: 3,
+        name: 'Tim Neutkens',
+        credit: 100,
+        tech: {},
+        overview: {}
+      }
     }),
   ])
   console.log(response)
