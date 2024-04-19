@@ -69,7 +69,7 @@ function Planet() {
         Camp
       </Heading>
       <Flex gap="1" wrap="wrap">
-        <Code>00:256:256:256:1024</Code>
+        <Code>00.256.256.256:1024</Code>
         <Badge color="blue">
           <DroneIcon></DroneIcon>
           0/0

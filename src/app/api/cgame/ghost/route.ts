@@ -1,4 +1,3 @@
-import prisma from '@/lib/prisma'
 import { getUser } from '@/model/user'
 import { getGhost } from '@/model/ghost'
 import { auth } from '@/lib/auth'
@@ -9,7 +8,7 @@ export async function GET() {
   if (!session) return null
 
   const user = await getUser(session.user!.email!)
-  const mage = await getGhost(user[0].id)
+  const ghost = await getGhost(user[0].id)
 
-  return Response.json({ session, mage })
+  return Response.json({ session, ghost })
 }

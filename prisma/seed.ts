@@ -1,5 +1,30 @@
 import prisma from '../src/lib/prisma'
+import { generatorEntry, generatorAccessPort } from '../src/gameplay/generator'
+import { Prisma } from '@prisma/client'
 
+async function minimalMap() {
+  const ap = await prisma.accessPort.findFirst()
+  if (ap) return
+  const entry = generatorEntry('00', '56')
+  const accessPort1 = generatorAccessPort(entry, {})
+  const accessPort2 = generatorAccessPort(entry, {})
+
+  const response = await Promise.all([
+    prisma.accessPort.create({
+      data: {
+        ...accessPort1,
+        facilities: accessPort1.facilities as unknown as Prisma.JsonArray, // Convert to unknown type
+      },
+    }),
+    prisma.accessPort.create({
+      data: {
+        ...accessPort2,
+        facilities: accessPort2.facilities as unknown as Prisma.JsonArray
+      },
+    }),
+  ])
+  console.log(response)
+}
 async function main() {
   const password = process.env.INIT_PASSWORD_HASH!
 
@@ -9,7 +34,7 @@ async function main() {
       update: {},
       create: {
         email: 'rauchg@vercel.com',
-        password
+        password,
       },
     }),
     prisma.user.upsert({
@@ -17,7 +42,7 @@ async function main() {
       update: {},
       create: {
         email: 'lee@vercel.com',
-        password
+        password,
       },
     }),
     prisma.user.upsert({
@@ -25,7 +50,7 @@ async function main() {
       update: {},
       create: {
         email: 'stey@vercel.com',
-        password
+        password,
       },
     }),
   ])
@@ -38,8 +63,8 @@ async function main() {
         name: 'Guillermo Rauch',
         credit: 100,
         tech: {},
-        overview: {}
-      }
+        view: {},
+      },
     }),
     prisma.ghost.upsert({
       where: { userId: 2 },
@@ -49,8 +74,8 @@ async function main() {
         name: 'Lee Robinson',
         credit: 100,
         tech: {},
-        overview: {}
-      }
+        view: {},
+      },
     }),
     prisma.ghost.upsert({
       where: { userId: 3 },
@@ -60,10 +85,11 @@ async function main() {
         name: 'Tim Neutkens',
         credit: 100,
         tech: {},
-        overview: {}
-      }
+        view: {},
+      },
     }),
   ])
+  await minimalMap()
   console.log(response)
 }
 main()
