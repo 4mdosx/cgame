@@ -1,5 +1,6 @@
 import { Prisma } from "@prisma/client"
 
+export type Position = string // ex. 00.256.256.256:1024
 export interface Facility {
   type: string
   id: string
@@ -7,18 +8,31 @@ export interface Facility {
 }
 
 export interface EntryHost {
-  id: string // 00.256.256.256
+  id: Position
   type: 'M' | 'K' | 'G' | 'F' | 'A' | 'B' | 'O'
   attributes: {
     [key: string]: any
   }
-  view: {
+}
+
+export interface Ark {
+  id : number
+  ghostId: number
+  position: Position
+  facilities: Facility[]
+  attributes: {
     [key: string]: any
+    power: number
+    power_max: number
+    build: number
+    industrial: number
+    intelligence: number
   }
 }
 
+
 export interface AccessPort {
-  id: string // 00.256.256.256:1024
+  id: Position
   environment: string
   facilities: Facility[]
   attributes: {
@@ -28,8 +42,5 @@ export interface AccessPort {
     fertility: number
     mineral: number
     ether: number
-  }
-  view: {
-    [key: string]: any
   }
 }

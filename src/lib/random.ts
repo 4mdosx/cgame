@@ -24,3 +24,12 @@ export function randomPort() {
   }
   return randomPick(49151 - 1024) + 1024
 }
+
+export function randomNormalDistribution(mean, stdDev) {
+  let u = 0,
+    v = 0
+  while (u === 0) u = Math.random() // 生成(0,1)区间的随机数
+  while (v === 0) v = Math.random() // 生成(0,1)区间的随机数
+  let z0 = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v)
+  return z0 * stdDev + mean // 转换为指定均值和标准差的正态分布随机数
+}

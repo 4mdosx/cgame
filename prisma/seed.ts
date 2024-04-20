@@ -5,7 +5,7 @@ import { Prisma } from '@prisma/client'
 async function minimalMap() {
   const ap = await prisma.accessPort.findFirst()
   if (ap) return
-  const entry = generatorEntry('00', '56')
+  const entry = generatorEntry('00')
   const accessPort1 = generatorAccessPort(entry, {})
   const accessPort2 = generatorAccessPort(entry, {})
 
@@ -63,7 +63,6 @@ async function main() {
         name: 'Guillermo Rauch',
         credit: 100,
         tech: {},
-        view: {},
       },
     }),
     prisma.ghost.upsert({
@@ -74,7 +73,6 @@ async function main() {
         name: 'Lee Robinson',
         credit: 100,
         tech: {},
-        view: {},
       },
     }),
     prisma.ghost.upsert({
@@ -85,7 +83,6 @@ async function main() {
         name: 'Tim Neutkens',
         credit: 100,
         tech: {},
-        view: {},
       },
     }),
   ])

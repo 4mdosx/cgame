@@ -26,7 +26,16 @@ model Ghost {
   name   String
   credit Int
   tech   Json
-  view   Json
+  arks   Ark[]
+}
+
+model Ark {
+  id         Int    @id @default(autoincrement())
+  position   String
+  facilities Json
+  attributes Json
+  ghostId    Int
+  ghost      Ghost  @relation(fields: [ghostId], references: [id])
 }
 
 model AccessPort {
@@ -34,5 +43,4 @@ model AccessPort {
   environment String
   facilities  Json
   attributes  Json
-  view        Json
 }

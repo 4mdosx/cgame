@@ -1,23 +1,47 @@
-import { randomPick, randomPort } from '../lib/pick'
+import { randomPort, randomNormalDistribution } from '../lib/random'
 import map from './mod/map'
-import { EntryHost, AccessPort, Facility } from '../../type/typing'
+import { EntryHost, AccessPort, Facility, Ark } from '../../type/typing'
+
+function getNormalPosition () {
+  let mean = 1 // 均值
+  let stdDev = 2000 // 标准差
+  const gridSize = 4096
+  let x = 0, y = 0
+  while (x === 0 || y === 0) {
+    let tx = randomNormalDistribution(mean, stdDev)
+    let ty = randomNormalDistribution(mean, stdDev)
+    tx = Math.round(tx + gridSize / 2)
+    ty = Math.round(ty + gridSize / 2)
+    if (tx > 0 && tx < gridSize && ty > 0 && ty < gridSize) {
+      x = tx
+      y = ty
+    }
+  }
+
+  const BlockX = Math.ceil( x / 256 )
+  const BlockY = Math.ceil( y / 256 )
+  const BlockId = (BlockY - 1) * 16 + BlockX
+
+  return {
+    BlockId,
+    offsetX: x - (BlockX - 1) * 256,
+    offsetY: y - (BlockY - 1) * 256
+  }
+}
 
 export function generatorEntry(
   LANId: string,
-  BlockId: string,
   params: any = {}
 ): EntryHost {
-  const row = randomPick(256)
-  const col = randomPick(256)
-  const id = `${LANId}.${BlockId}.${row}.${col}`
+  const { BlockId, offsetX, offsetY } = getNormalPosition()
+  const id = `${LANId}.${BlockId}.${offsetX}.${offsetY}`
 
   return {
     id,
     type: params.type || 'G',
     attributes: {
       ...params.attributes,
-    },
-    view: {},
+    }
   }
 }
 
@@ -31,11 +55,6 @@ export function createAccessPoint(ap: AccessPort) {
     ap.attributes.fertility -= 1
     ap.attributes.ether += 1
   }
-  ap.view.space = ap.attributes.space
-  ap.view.solar = ap.attributes.solar
-  ap.view.fertility = ap.attributes.fertility
-  ap.view.mineral = ap.attributes.mineral
-  ap.view.ether = ap.attributes.ether
 
   return ap
 }
@@ -49,9 +68,36 @@ export function generatorAccessPort(entry: EntryHost, params: any): AccessPort {
     id,
     environment,
     facilities: [] as Facility[],
-    attributes: { ...map.environment[environment], ...params.attributes },
-    view: {},
+    attributes: { ...map.environment[environment], ...params.attributes }
   }
 
   return createAccessPoint(baseParams)
+}
+
+export function generatorArk(): Partial<Ark> {
+  const ark = {
+    position: '',
+    facilities: [] as Facility[],
+    attributes: {
+      power_max: 10,
+      power: 10,
+      build: 20,
+      industrial: 20,
+      intelligence: 0
+    }
+  }
+
+  return ark
+}
+
+export function newPlayer () {
+  const entry = generatorEntry('00')
+  const accessPort = generatorAccessPort(entry, {})
+  const ark = generatorArk()
+  ark.position = accessPort.id
+
+  return {
+    accessPort,
+    ark
+  }
 }
