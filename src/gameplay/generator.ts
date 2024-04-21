@@ -83,7 +83,8 @@ export function generatorArk(): Partial<Ark> {
       power: 10,
       build: 20,
       industrial: 20,
-      intelligence: 0
+      intelligence: 0,
+      build_queue: 3
     }
   }
 

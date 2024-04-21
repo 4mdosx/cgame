@@ -1,7 +1,7 @@
 
 export const environment = {
   earthly: {
-    space: 50,
+    area: 50,
     solar: 3,
     fertility: 4,
     mineral: 3,

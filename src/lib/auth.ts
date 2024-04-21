@@ -1,8 +1,7 @@
 import NextAuth from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 import { compare } from 'bcrypt-ts'
-import { getUser } from '@/model/user'
-import { getGhost } from '@/model/ghost'
+import { getGhost, getUser } from './model'
 import { authConfig } from './auth.config'
 import { Ghost } from '@prisma/client'
 

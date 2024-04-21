@@ -1,8 +1,7 @@
-import { Prisma } from "@prisma/client"
+import { Ghost, Prisma } from "@prisma/client"
 
 export type Position = string // ex. 00.256.256.256:1024
 export interface Facility {
-  type: string
   id: string
   level: number
 }
@@ -27,7 +26,11 @@ export interface Ark {
     build: number
     industrial: number
     intelligence: number
+    build_queue: number
   }
+  ghost: Ghost
+  buildOrders: any[]
+  accessPort: AccessPort
 }
 
 
@@ -37,7 +40,7 @@ export interface AccessPort {
   facilities: Facility[]
   attributes: {
     [key: string]: any
-    space: number
+    area: number
     solar: number
     fertility: number
     mineral: number

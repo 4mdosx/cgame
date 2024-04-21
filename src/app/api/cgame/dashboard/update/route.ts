@@ -28,17 +28,19 @@ export async function POST() {
       }
       player = newPlayer()
     }
-    await prisma.accessPort.create({
-      data: {
-        ...player.accessPort,
-        facilities: player.accessPort.facilities as any,
-      },
-    })
+
     const ark = await prisma.ark.create({
       data: {
         ...player.ark,
         facilities: player.ark.facilities as any,
         ghostId: ghost.id,
+      } as any,
+    })
+    await prisma.accessPort.create({
+      data: {
+        ...player.accessPort,
+        arkId: ark.id,
+        facilities: player.accessPort.facilities as any,
       },
     })
     arks.push(ark)

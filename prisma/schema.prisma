@@ -30,12 +30,14 @@ model Ghost {
 }
 
 model Ark {
-  id         Int    @id @default(autoincrement())
-  position   String
-  facilities Json
-  attributes Json
-  ghostId    Int
-  ghost      Ghost  @relation(fields: [ghostId], references: [id])
+  id          Int          @id @default(autoincrement())
+  position    String
+  facilities  Json
+  attributes  Json
+  ghostId     Int?
+  ghost       Ghost?        @relation(fields: [ghostId], references: [id])
+  buildOrders BuildOrder[]
+  accessPort  AccessPort?
 }
 
 model AccessPort {
@@ -43,4 +45,17 @@ model AccessPort {
   environment String
   facilities  Json
   attributes  Json
+  arkId       Int?    @unique
+  ark         Ark?    @relation(fields: [arkId], references: [id])
+}
+
+model BuildOrder {
+  id         String   @id @default(uuid())
+  createdAt  DateTime @default(now())
+  finishedAt DateTime
+  buildName  String
+  status     String
+  arkId      Int
+  ark        Ark      @relation(fields: [arkId], references: [id])
+  payload    Json
 }
