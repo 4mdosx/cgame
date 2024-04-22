@@ -22,10 +22,7 @@ export async function getArk(arkId: number) {
   const ark = await prisma.ark.findFirst({
     where: {
       id: arkId,
-    },
-    include: {
-      ghost: true,
-    },
+    }
   })
 
   return ark as unknown as Ark

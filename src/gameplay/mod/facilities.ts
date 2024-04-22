@@ -9,8 +9,8 @@ export const ap = {
       resource: 'fertility',
       value: 1
     }, {
-      type: 'area',
-      value: -1
+      type: 'area_used',
+      value: 1
     }]
   },
   sop:{
@@ -22,11 +22,11 @@ export const ap = {
       resource: 'solar',
       value: 1
     }, {
-      type: 'area',
-      value: -1
+      type: 'area_used',
+      value: 1
     }, {
-      type: 'supply',
-      value: -1
+      type: 'supply_used',
+      value: 1
     }]
   },
   mref: {
@@ -45,14 +45,14 @@ export const ap = {
       resource: 'mineral',
       value: 1
     }, {
-      type: 'energy',
-      value: -1
+      type: 'energy_used',
+      value: 1
     },{
-      type: 'supply',
-      value: -1
+      type: 'supply_used',
+      value: 1
     }, {
-      type: 'area',
-      value: -1
+      type: 'area_used',
+      value: 1
     }]
   },
   cref: {
@@ -67,14 +67,14 @@ export const ap = {
       type: 'intelligence',
       value: 2
     }, {
-      type: 'energy',
-      value: -1
+      type: 'energy_used',
+      value: 1
     },{
-      type: 'supply',
-      value: -1
+      type: 'supply_used',
+      value: 1
     }, {
-      type: 'area',
-      value: -1
+      type: 'area_used',
+      value: 1
     }]
   },
   zlib: {
@@ -86,14 +86,14 @@ export const ap = {
       resource: 'ether',
       value: 3
     }, {
-      type: 'energy',
-      value: -1
+      type: 'energy_used',
+      value: 1
     },{
-      type: 'supply',
-      value: -1
+      type: 'supply_used',
+      value: 1
     }, {
-      type: 'area',
-      value: -1
+      type: 'area_used',
+      value: 1
     }]
   },
   shp: {
@@ -107,14 +107,14 @@ export const ap = {
       type: 'industrial',
       value: 2
     }, {
-      type: 'energy',
-      value: -1
+      type: 'energy_used',
+      value: 1
     },{
-      type: 'supply',
-      value: -1
+      type: 'supply_used',
+      value: 1
     }, {
-      type: 'area',
-      value: -1
+      type: 'area_used',
+      value: 1
     }]
   },
 }

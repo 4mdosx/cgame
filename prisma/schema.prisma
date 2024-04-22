@@ -52,7 +52,7 @@ model AccessPort {
 model BuildOrder {
   id         String   @id @default(uuid())
   createdAt  DateTime @default(now())
-  finishedAt DateTime
+  finishedAt DateTime?
   buildName  String
   status     String
   arkId      Int

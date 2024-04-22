@@ -47,3 +47,15 @@ export interface AccessPort {
     ether: number
   }
 }
+
+export interface BuildOrder {
+  id: string
+  arkId: number
+  buildName: string
+  status: 'pending' | 'processing' | 'finished'
+  payload: {
+    position: Position
+  }
+  createdAt: Date
+  finishedAt: Date
+}
