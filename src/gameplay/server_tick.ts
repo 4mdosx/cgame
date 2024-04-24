@@ -1,6 +1,7 @@
 import prisma from '@/lib/prisma'
 import { BuildOrder, Ark } from '../../type/typing'
 import * as GameArk from '@/gameplay/ark'
+import * as calculator from './calculator'
 
 export async function orderUpdate () {
   // 寻找已经超过完成时间的订单
@@ -67,4 +68,35 @@ export async function orderUpdate () {
     })
     if (!processingOrder) await GameArk.startPending(ark.arkId)
   }))
+}
+
+export async function incomeUpdate () {
+  const ghosts = await prisma.ghost.findMany({
+    include: {
+      arks: {
+        include: {
+          accessPort: true
+        }
+      }
+    }
+  })
+  ghosts.forEach(async ghost => {
+    const arks = ghost.arks as unknown as Ark[]
+
+    const income = arks.reduce((acc, ark) => {
+      if (!ark.accessPort) return acc
+      const acAttrs = calculator.accessPortAttrs(ark.accessPort)
+      return acc + acAttrs.economy
+    }, 0)
+    await prisma.ghost.update({
+      where: {
+        id: ghost.id
+      },
+      data: {
+        credit: {
+          increment: income
+        }
+      }
+    })
+  })
 }

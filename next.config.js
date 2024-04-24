@@ -6,8 +6,16 @@ import('got').then(module => {
 })
 
 cron.schedule('* * * * *', function () {
-  console.log('running a task every minute')
-  got('http://localhost:4000/api/cron/order', {
+  got(process.env.LOCAL_HOST + '/api/cron/order', {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + process.env.CRON_SECRET
+    }
+  })
+})
+
+cron.schedule('0 * * * *', function () {
+  got(process.env.LOCAL_HOST + '/api/cron/income', {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + process.env.CRON_SECRET
