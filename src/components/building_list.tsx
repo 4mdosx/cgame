@@ -94,6 +94,7 @@ function Building({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['work_queue'] })
+      queryClient.invalidateQueries({ queryKey: ['ghost', 'me'] })
     },
   })
   const costs = facSpec.effect.filter((e) => e.type.includes('_used'))

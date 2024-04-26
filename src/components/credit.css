@@ -1,0 +1,23 @@
+
+.credit-box {
+  .diff {
+    position: absolute;
+    right: 8px;
+    bottom: -8px;
+    opacity: 0;
+  }
+  .zoomIn {
+    animation: credit-zoomIn 2s linear;
+  }
+}
+
+@keyframes credit-zoomIn {
+  0% {
+    opacity: 1;
+    bottom: -8px;
+  }
+  100% {
+    bottom: -20px;
+    opacity: 0;
+  }
+}

@@ -6,10 +6,11 @@ import {
   Badge,
   Flex,
   Separator,
-  Button
+  Button,
 } from '@radix-ui/themes'
 import APlist from '@/components/ap_list'
 import APPanel from '@/components/ap_panel'
+import Credit from '@/components/credit'
 
 export default function App() {
   return (
@@ -17,17 +18,21 @@ export default function App() {
       <Grid columns="4" gap="4" width="auto">
         <APlist></APlist>
         <Box>
-          <div className='bg-white rounded-lg p-2 text-right'>
-            <div style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%239C92AC' fill-opacity='0.6' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 6V5zM6 5v1H5z'/%3E%3C/g%3E%3C/svg%3E")`, backgroundSize: '6px', height: '68px', width: '100%' }}></div>
+          <div className="bg-white rounded-lg p-2 text-right">
+            <div
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%239C92AC' fill-opacity='0.6' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 6V5zM6 5v1H5z'/%3E%3C/g%3E%3C/svg%3E")`,
+                backgroundSize: '6px',
+                height: '68px',
+                width: '100%',
+              }}
+            ></div>
           </div>
         </Box>
         <Box>
-          <div className='bg-black rounded-lg p-2 text-right'>
-            <i className="bi-hexagon-fill mr-1 text-emerald-500"></i>
-            <span className='text-emerald-500'>100</span>
-          </div>
+          <Credit></Credit>
         </Box>
-          <APPanel></APPanel>
+        <APPanel></APPanel>
       </Grid>
     </div>
   )
