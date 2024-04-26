@@ -1,23 +1,19 @@
 import { AccessPort, Ark } from '../../type/typing'
 import {
   Heading,
-  Grid,
-  Box,
-  Code,
   Badge,
   Flex,
   Separator,
   Button,
   Card,
   Text,
-  ScrollArea,
 } from '@radix-ui/themes'
 import DroneIcon from '@/components/icons/drone'
 import { useContext, useState } from 'react'
 import { AccessPortContext } from './ap_panel'
 import facility from '@/gameplay/mod/facilities'
 import * as calculator from '@/gameplay/calculator'
-import './BuildingList.css'
+import './building_list.css'
 import { intervalToDuration } from 'date-fns'
 import clsx from 'clsx'
 import { useMutation, useQueryClient } from '@tanstack/react-query'

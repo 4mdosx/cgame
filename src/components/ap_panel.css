@@ -1,0 +1,51 @@
+.ap-panel_mark {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: absolute;
+  top: 0;
+  left: -12px;
+}
+
+@keyframes mark-pulse {
+  50% {
+    opacity: .5
+  }
+}
+
+.outside-circle {
+  cursor: pointer;
+  position: relative;
+  background: rgb(234, 234, 235);
+  color: rgb(113, 113, 122);
+  border-radius: 0 14px 14px 0;
+  padding: 4px;
+  text-align: left;
+  z-index: 2;
+
+  .text {
+    padding: 4px 10px;
+    width: 40px;
+    text-wrap: nowrap;
+    font-size: 20px;
+    font-weight: 600;
+    overflow: hidden;
+    transition: width cubic-bezier(0.39, 0.575, 0.565, 1) 0.3s;
+  }
+}
+
+.outside-circle.active,
+.outside-circle:hover {
+  .text {
+    color: #000;
+    background-color: rgb(255, 255, 255);
+    border-radius: 14px;
+  }
+}
+
+.outside-circle:hover {
+  .text {
+    text-align: center;
+    width: 140px;
+  }
+}
