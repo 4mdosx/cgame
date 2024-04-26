@@ -1,6 +1,7 @@
 
 export const ap = {
   sud: {
+    category: 'base',
     name: 'Supply Depot',
     description: 'A supply depot provides storage for resources.',
     cost: 1,
@@ -14,6 +15,7 @@ export const ap = {
     }]
   },
   sop:{
+    category: 'base',
     name: 'Solar Panel',
     description: 'A solar panel generates solar energy.',
     cost: 2,
@@ -30,6 +32,7 @@ export const ap = {
     }]
   },
   mref: {
+    category: 'base',
     name: 'Mineral Refinery',
     description: 'A mineral refinery generates mineral resources.',
     cost: 2,
@@ -56,6 +59,7 @@ export const ap = {
     }]
   },
   cref: {
+    category: 'eco',
     name: 'Crystal Refinery',
     description: 'A crystal refinery generates ether resources.',
     cost: 2,
@@ -78,6 +82,7 @@ export const ap = {
     }]
   },
   zlib: {
+    category: 'tech',
     name: 'Zs library',
     description: 'A daunting library where ether is transformed into knowledge',
     cost: 6,
@@ -97,6 +102,7 @@ export const ap = {
     }]
   },
   shp: {
+    category: 'ship',
     name: 'Shipyard',
     description: 'A shipyard produces ships and other vehicles.',
     cost: 5,

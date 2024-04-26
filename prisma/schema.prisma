@@ -42,6 +42,7 @@ model Ark {
 
 model AccessPort {
   id          String @id @unique
+  name        String @default("Vacant World")
   environment String
   facilities  Json
   attributes  Json

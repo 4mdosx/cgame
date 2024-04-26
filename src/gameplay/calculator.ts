@@ -1,9 +1,8 @@
 import { Ark, AccessPort } from "../../type/typing"
 import facility from "./mod/facilities"
 
-export function buildPoint ({ ark }: { ark: Ark }) {
-  let build = ark.attributes.build
-  const accessPort = ark.accessPort
+export function buildPoint ({ accessPort }: { accessPort: AccessPort }) {
+  let build = 0
   if (accessPort) {
     accessPort.facilities.forEach(fac => {
       const schema = facility.ap[fac.id]
@@ -22,19 +21,19 @@ export function buildPoint ({ ark }: { ark: Ark }) {
   return build
 }
 
-export function buildCost ({ ark, buildName }: { ark: Ark, buildName: string }) {
-  const fac = ark.accessPort.facilities.find(f => f.id === buildName) || { id: buildName, level: 0 }
+export function buildCost ({ accessPort, buildName }: { accessPort: AccessPort, buildName: string }) {
+  const fac = accessPort.facilities.find(f => f.id === buildName) || { id: buildName, level: 0 }
   if (!facility.ap[buildName]) {
     throw new Error('facility not found')
   }
 
   const cost = (fac.level + 1) ** 1.5 * facility.ap[buildName].cost
-  return cost
+  return Math.floor(cost)
 }
 
 export function buildFinishedAt ({ cost, buildPoint }: { cost: number, buildPoint: number }) {
   const time = cost / buildPoint * 3600
-  return new Date(Date.now() + Math.min(time, 60) * 1000) // 60s is the minimum time
+  return new Date(Date.now() + Math.max(time, 60) * 1000) // 60s is the minimum time
 }
 
 export function accessPortAttrs (accessPort: AccessPort) {

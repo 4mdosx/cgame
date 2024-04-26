@@ -4,7 +4,7 @@ import * as calculator from './calculator'
 import facility from './mod/facilities'
 
 function buildValidate (ark: Ark, buildName: string) {
-  const cost = calculator.buildCost({ ark, buildName })
+  const cost = calculator.buildCost({ accessPort: ark.accessPort, buildName })
   if (ark.ghost.credit < cost) {
     throw new Error('credit not enough')
   }
@@ -78,7 +78,7 @@ export async function build (arkId: number, buildName: string) {
         payload: {
           position: ark.position,
         },
-        finishedAt: calculator.buildFinishedAt({ cost: calculator.buildCost({ ark, buildName }), buildPoint: calculator.buildPoint({ ark }) })
+        finishedAt: calculator.buildFinishedAt({ cost: calculator.buildCost({ accessPort: ark.accessPort, buildName }), buildPoint: calculator.buildPoint({ accessPort: ark.accessPort }) + ark.attributes.build })
       }
     }),
     prisma.ghost.update({
@@ -87,7 +87,7 @@ export async function build (arkId: number, buildName: string) {
       },
       data: {
         credit: {
-          decrement: calculator.buildCost({ ark, buildName })
+          decrement: calculator.buildCost({ accessPort: ark.accessPort, buildName })
         }
       }
     })
@@ -124,7 +124,7 @@ export async function startPending (arkId: number) {
         },
         data: {
           status: 'processing',
-          finishedAt: calculator.buildFinishedAt({ cost: calculator.buildCost({ ark, buildName: order.buildName }), buildPoint: calculator.buildPoint({ ark }) })
+          finishedAt: calculator.buildFinishedAt({ cost: calculator.buildCost({ accessPort: ark.accessPort, buildName: order.buildName }), buildPoint: calculator.buildPoint({ accessPort: ark.accessPort }) + ark.attributes.build })
         }
       }),
       prisma.ghost.update({
@@ -133,7 +133,7 @@ export async function startPending (arkId: number) {
         },
         data: {
           credit: {
-            decrement: calculator.buildCost({ ark, buildName: order.buildName })
+            decrement: calculator.buildCost({ accessPort: ark.accessPort, buildName: order.buildName })
           }
         }
       })

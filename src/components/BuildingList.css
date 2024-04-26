@@ -1,0 +1,21 @@
+.building .sort-icon {
+  position: relative;
+}
+.building .sort-icon .icon-1, .building .sort-icon .icon-2{
+  transition: opacity 0.3s;
+}
+.building .sort-icon .icon-1{
+  opacity: 1;
+}
+.building .sort-icon .icon-2{
+  opacity: 0;
+  position: absolute;
+  left: 0;
+}
+
+.building .sort-icon:hover .icon-1{
+  opacity: 0;
+}
+.building .sort-icon:hover .icon-2{
+  opacity: 1;
+}

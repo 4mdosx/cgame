@@ -1,7 +1,7 @@
 'use client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Box } from '@radix-ui/themes'
-import Nav from './components/nav'
+import Nav from '@/components/nav'
 import { Theme } from '@radix-ui/themes'
 import '../globals.sass'
 
@@ -18,6 +18,7 @@ export default function Layout({ children }) {
               backgroundColor: 'var(--nav-bg-color)',
               backgroundImage: 'url(/bg1.png)',
               backgroundSize: 'cover',
+              overflowY: 'auto',
             }}>{children}</Box>
           </QueryClientProvider>
         </Theme>

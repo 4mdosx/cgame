@@ -1,4 +1,4 @@
-import { Ghost, Prisma } from "@prisma/client"
+import { Ghost, Prisma } from '@prisma/client'
 
 export type Position = string // ex. 00.256.256.256:1024
 export interface Facility {
@@ -15,7 +15,7 @@ export interface EntryHost {
 }
 
 export interface Ark {
-  id : number
+  id: number
   ghostId: number
   position: Position
   facilities: Facility[]
@@ -33,9 +33,9 @@ export interface Ark {
   accessPort: AccessPort
 }
 
-
 export interface AccessPort {
   id: Position
+  name: string
   environment: string
   facilities: Facility[]
   attributes: {
@@ -45,6 +45,13 @@ export interface AccessPort {
     fertility: number
     mineral: number
     ether: number
+  }
+}
+
+export interface AccessPortWithComputedAttrs extends AccessPort {
+  ark: Ark
+  computedAttrs: {
+    [key: string]: any
   }
 }
 
