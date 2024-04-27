@@ -92,7 +92,7 @@ function Building({
         body: JSON.stringify({ arkId: ark.id, buildName: id }),
       })
     },
-    onSuccess: () => {
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['work_queue'] })
       queryClient.invalidateQueries({ queryKey: ['ghost', 'me'] })
     },

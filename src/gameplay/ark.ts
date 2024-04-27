@@ -57,8 +57,9 @@ export async function build (arkId: number, buildName: string) {
           arkId: ark.id,
           buildName: buildName,
           status: 'pending',
+          finishedAt: calculator.buildFinishedAt({ cost: calculator.buildCost({ accessPort: ark.accessPort, buildName }), buildPoint: calculator.buildPoint({ accessPort: ark.accessPort }) + ark.attributes.build }),
           payload: {
-            position: ark.position
+            position: ark.position,
           }
         }
       })
