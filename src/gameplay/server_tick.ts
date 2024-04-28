@@ -2,85 +2,111 @@ import prisma from '@/lib/prisma'
 import { BuildOrder, Ark } from '../../type/typing'
 import * as GameArk from '@/gameplay/ark'
 import * as calculator from './calculator'
+import initArk from './class/ark'
 
-export async function orderUpdate () {
-  // 寻找已经超过完成时间的订单
-  const orders = await prisma.buildOrder.findMany({
+export async function orderUpdate() {
+  const orders = (await prisma.buildOrder.findMany({
     where: {
       status: 'processing',
       finishedAt: {
-        lte: new Date()
-      }
-    }
-  }) as unknown as BuildOrder[]
-  orders.forEach(async order => {
-    const ark = await prisma.ark.findFirst({
+        lte: new Date(),
+      },
+    },
+  })) as unknown as BuildOrder[]
+  orders.forEach(async (order) => {
+    const ark = (await prisma.ark.findFirst({
       where: {
-        id: order.arkId
+        id: order.arkId,
       },
       include: {
-        accessPort: true
-      }
-    }) as unknown as Ark
+        accessPort: true,
+      },
+    })) as unknown as Ark
     if (order.payload && ark.position === order.payload.position) {
       // 更新订单状态
       await prisma.buildOrder.update({
         where: {
-          id: order.id
+          id: order.id,
         },
         data: {
-          status: 'finished'
-        }
+          status: 'finished',
+        },
       })
       // 更新资源
-      const fac = ark.accessPort.facilities.find(f => f.id === order.buildName)
+      const fac = ark.accessPort.facilities.find(
+        (f) => f.id === order.buildName
+      )
       if (fac) {
         fac.level++
       } else {
         ark.accessPort.facilities.push({
           id: order.buildName,
-          level: 1
+          level: 1,
         })
       }
       await prisma.accessPort.update({
         where: {
-          id: ark.accessPort.id
+          id: ark.accessPort.id,
         },
         data: {
-          facilities: ark.accessPort.facilities as any
-        }
+          facilities: ark.accessPort.facilities as any,
+        },
       })
     }
   })
 
-  const pendingOrderArks = await prisma.buildOrder.groupBy({
+  const pendingOrderArks = (await prisma.buildOrder.groupBy({
     by: ['arkId'],
     where: {
-      status: 'pending'
+      status: 'pending',
     },
-  }) as unknown as any[]
-  await Promise.all(pendingOrderArks.map(async ark => {
-    const processingOrder = await prisma.buildOrder.findFirst({
-      where: {
-        arkId: ark.arkId,
-        status: 'processing'
-      }
+  })) as unknown as any[]
+  await Promise.all(
+    pendingOrderArks.map(async (ark) => {
+      const processingOrder = await prisma.buildOrder.findFirst({
+        where: {
+          arkId: ark.arkId,
+          status: 'processing',
+        },
+      })
+      if (!processingOrder) await GameArk.startPending(ark.arkId)
     })
-    if (!processingOrder) await GameArk.startPending(ark.arkId)
-  }))
+  )
 }
 
-export async function incomeUpdate () {
+export async function progressUpdate(type) {
+  const orders = (await prisma.order.findMany({
+    where: {
+      type,
+      status: {
+        in: ['processing', 'pending'],
+      },
+    },
+  })) as unknown as any[]
+  const arkIdSets = new Set()
+  orders.forEach((order) => {
+    arkIdSets.add(order.arkId)
+  })
+  const arkIdSetsArray = Array.from(arkIdSets)
+  return Promise.all(
+    arkIdSetsArray.map(async (arkId) => {
+      const ark = await initArk(arkId)
+      return ark.updateOrders(type)
+    })
+  )
+}
+
+export async function incomeUpdate() {
   const ghosts = await prisma.ghost.findMany({
     include: {
       arks: {
         include: {
-          accessPort: true
-        }
-      }
-    }
+          accessPort: true,
+        },
+      },
+    },
   })
-  ghosts.forEach(async ghost => {
+  ghosts.forEach(async (ghost) => {
     const arks = ghost.arks as unknown as Ark[]
 
     const income = arks.reduce((acc, ark) => {
@@ -90,13 +116,13 @@ export async function incomeUpdate () {
     }, 0)
     await prisma.ghost.update({
       where: {
-        id: ghost.id
+        id: ghost.id,
       },
       data: {
         credit: {
-          increment: income
-        }
-      }
+          increment: income,
+        },
+      },
     })
   })
 }

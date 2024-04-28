@@ -19,6 +19,9 @@ export interface Ark {
   ghostId: number
   position: Position
   facilities: Facility[]
+  apron: {
+    [key: string]: number
+  }
   attributes: {
     [key: string]: any
     power: number
@@ -26,11 +29,21 @@ export interface Ark {
     build: number
     industrial: number
     intelligence: number
+    facility_queue: number
     build_queue: number
   }
   ghost: Ghost
   buildOrders: any[]
   accessPort: AccessPort
+}
+
+export interface ArkAttrs {
+  [key: string]: any
+}
+export interface ArkWithComputedAttrs extends Ark {
+  computedAttrs: {
+    [key: string]: any
+  }
 }
 
 export interface AccessPort {
@@ -52,6 +65,29 @@ export interface AccessPortWithComputedAttrs extends AccessPort {
   ark: Ark
   computedAttrs: {
     [key: string]: any
+  }
+}
+
+export interface Order {
+  id: string
+  ghostId: number
+  status: 'pending' | 'processing' | 'finished'
+  type: 'build_unit' | 'build_facility'
+  progress: number
+  progressMax: number
+  payload: {
+    [key: string]: any
+  }
+  createdAt: Date
+}
+
+export interface BuildUnitOrder extends Order {
+  type: 'build_unit'
+  payload: {
+    [key: string]: any
+    unitId: number
+    unitCount: number
+    arkId: number
   }
 }
 

@@ -20,13 +20,14 @@ model User {
 }
 
 model Ghost {
-  id     Int    @id @default(autoincrement())
-  userId Int    @unique
-  user   User   @relation(fields: [userId], references: [id])
+  id     Int     @id @default(autoincrement())
+  userId Int     @unique
+  user   User    @relation(fields: [userId], references: [id])
   name   String
   credit Int
   tech   Json
   arks   Ark[]
+  orders Order[]
 }
 
 model Ark {
@@ -35,9 +36,10 @@ model Ark {
   facilities  Json
   attributes  Json
   ghostId     Int?
-  ghost       Ghost?        @relation(fields: [ghostId], references: [id])
+  ghost       Ghost?       @relation(fields: [ghostId], references: [id])
   buildOrders BuildOrder[]
   accessPort  AccessPort?
+  apron       Json
 }
 
 model AccessPort {
@@ -46,17 +48,29 @@ model AccessPort {
   environment String
   facilities  Json
   attributes  Json
-  arkId       Int?    @unique
-  ark         Ark?    @relation(fields: [arkId], references: [id])
+  arkId       Int?   @unique
+  ark         Ark?   @relation(fields: [arkId], references: [id])
 }
 
 model BuildOrder {
-  id         String   @id @default(uuid())
-  createdAt  DateTime @default(now())
+  id         String    @id @default(uuid())
+  createdAt  DateTime  @default(now())
   finishedAt DateTime?
   buildName  String
   status     String
   arkId      Int
-  ark        Ark      @relation(fields: [arkId], references: [id])
+  ark        Ark       @relation(fields: [arkId], references: [id])
   payload    Json
+}
+
+model Order {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  status      String
+  type        String
+  payload     Json
+  progress    Int
+  progressMax Int
+  ghostId     Int?
+  ghost       Ghost?   @relation(fields: [ghostId], references: [id])
 }

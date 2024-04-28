@@ -61,3 +61,27 @@ export function accessPortAttrs (accessPort: AccessPort) {
   })
   return attrs
 }
+
+export function arkAttrs (ark: Ark) {
+  const attrs = Object.assign({
+    facility_queue: 3,
+    unit_queue: 3,
+    economy: 0,
+    intelligence: 0,
+    build: 0,
+    industrial: 0,
+    energy: 0,
+    energy_used: 0,
+    supply: 0,
+    supply_used: 0,
+    area: 0,
+    area_used: 0
+  }, ark.attributes)
+  if (ark.accessPort) {
+    const apAttrs = accessPortAttrs(ark.accessPort)
+    Object.keys(apAttrs).forEach(key => {
+      attrs[key] += apAttrs[key]
+    })
+  }
+  return attrs
+}

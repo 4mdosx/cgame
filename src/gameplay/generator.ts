@@ -66,6 +66,7 @@ export function generatorAccessPort(entry: EntryHost, params: any): AccessPort {
   const environment = params.environment || 'earthly'
   const baseParams = {
     id,
+    name: params.name || 'Vacant World',
     environment,
     facilities: [] as Facility[],
     attributes: { ...map.environment[environment], ...params.attributes }
@@ -78,12 +79,14 @@ export function generatorArk(): Partial<Ark> {
   const ark = {
     position: '',
     facilities: [] as Facility[],
+    apron: {},
     attributes: {
       power_max: 10,
       power: 10,
       build: 20,
       industrial: 20,
       intelligence: 0,
+      facility_queue: 3,
       build_queue: 3
     }
   }

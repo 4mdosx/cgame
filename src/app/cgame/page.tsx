@@ -11,8 +11,22 @@ import {
 import APlist from '@/components/ap_list'
 import APPanel from '@/components/ap_panel'
 import Credit from '@/components/credit'
-
+import {
+  useQuery,
+} from '@tanstack/react-query'
 export default function App() {
+  const { isPending, error, data } = useQuery({
+    queryKey: ['repoData'],
+    queryFn: () =>
+      fetch('/api/cgame/dashboard/update', {
+        method: 'POST',
+      }).then((res) =>
+        res.json()
+      ),
+  })
+
+  if (isPending) return 'Loading...'
+
   return (
     <div>
       <Grid columns="4" gap="4" width="auto">
@@ -34,44 +48,6 @@ export default function App() {
         </Box>
         <APPanel></APPanel>
       </Grid>
-    </div>
-  )
-}
-
-function Ark() {
-  return (
-    <div className="bg-white rounded-2xl p-2">
-      <Heading size="5" mb="1">
-        <i className="bi-safe2 text-xl mr-2"></i>
-        Production
-      </Heading>
-      <Flex gap="1" wrap="wrap">
-        <Badge color="blue">
-          <i className="bi-hammer"></i>
-          20
-        </Badge>
-        <Badge color="blue">
-          <i className="bi-gear-wide-connected"></i>
-          20
-        </Badge>
-        <Badge color="blue">
-          <i className="bi-postage-fill"></i>0
-        </Badge>
-      </Flex>
-      <Box pb="4"></Box>
-      <Heading size="4" mb="1" weight="medium">
-        Supply Depot
-      </Heading>
-      <Flex justify="between">
-        <div>
-          <i className="bi-alarm mr-1 text-orange-700"></i>
-          <span className="text-orange-700">00:05:00</span>
-        </div>
-        <Button color="crimson" variant="soft" size="1">
-          <i className="bi-x-lg"></i>
-        </Button>
-      </Flex>
-      <Separator my="3" size="4" />
     </div>
   )
 }
