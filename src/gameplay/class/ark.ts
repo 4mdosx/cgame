@@ -32,12 +32,14 @@ export class ArkUtils {
   async buildUnit({ unitId, unitCount }) {
     await this.checkQueueFull('build_unit')
     const unitSpec = unitMod[unitId]
-    const progressMax = unitSpec.cost * unitCount * CONSTANT.tickPerTurn
+    const cost = unitSpec.cost * unitCount
+    const progressMax = cost * CONSTANT.tickPerTurn
     await prisma.order.create({
       data: {
         ghostId: this.ark.ghostId,
         type: 'build_unit',
         status: 'pending',
+        cost,
         progress: 0,
         progressMax,
         payload: {
@@ -84,7 +86,7 @@ export class ArkUtils {
       if (finished) {
         switch (type) {
           case 'build_unit':
-            const { arkId, unitCount, unitId } = (order as BuildUnitOrder).payload
+            const { arkId, unitCount, unitId } = (order as unknown as BuildUnitOrder).payload
             const ark = await prisma.ark.findFirst({ where: { id: arkId } }) as unknown as Ark
             await prisma.ark.update({
               where: {
@@ -123,7 +125,7 @@ export class ArkUtils {
         },
         data: {
           credit: {
-            decrement: order.progressMax
+            decrement: order.cost
           }
         }
       })

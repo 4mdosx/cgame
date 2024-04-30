@@ -69,6 +69,7 @@ model Order {
   status      String
   type        String
   payload     Json
+  cost        Int
   progress    Int
   progressMax Int
   ghostId     Int?
